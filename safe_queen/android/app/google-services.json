@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "773986058596",
+    "project_id": "flutter-firebase-app-790d7",
+    "storage_bucket": "flutter-firebase-app-790d7.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:773986058596:android:681289f5f5d2a380e9ba71",
+        "android_client_info": {
+          "package_name": "com.example.safe_queen"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBCSF4f52kMfWBxG6ZeGrJ2W_647hIzgOE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
