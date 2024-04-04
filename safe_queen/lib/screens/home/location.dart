@@ -1,3 +1,4 @@
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -43,7 +44,7 @@ class _LocationDemoState extends State<LocationDemo> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "Location Demo",
+          "Your Location",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 20,
@@ -53,11 +54,19 @@ class _LocationDemoState extends State<LocationDemo> {
       ),
       body: Stack(
         children: [
-          // Background Image
+          // Background Image with Blur Effect
           Positioned.fill(
             child: Image.asset(
-              'assets/images/pngtree-tech-blue-clock-h5-background-material-picture-image_992604.jpg', // Replace this with your image path
+              'assets/images/gps-mobile-track-navigate.jpg', // Replace this with image path
               fit: BoxFit.cover,
+            ),
+          ),
+          Positioned.fill(
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0), // Adjust sigmaX and sigmaY as needed
+              child: Container(
+                color: Colors.black.withOpacity(0.5), // Adjust the opacity as needed
+              ),
             ),
           ),
           // Content
@@ -72,7 +81,7 @@ class _LocationDemoState extends State<LocationDemo> {
                   _showLocationOnMap();
                 },
                 style: ElevatedButton.styleFrom(
-                  foregroundColor: Colors.white, backgroundColor: Colors.blue, // Text color
+                  foregroundColor: Colors.white, backgroundColor: Colors.pinkAccent, // Text color
                   elevation: 10, // Elevation
                 ),
                 child: Padding(

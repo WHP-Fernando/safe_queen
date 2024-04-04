@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+ 
 
 class SafetyTips extends StatelessWidget {
   const SafetyTips({Key? key}) : super(key: key);
@@ -14,17 +15,20 @@ class SafetyTips extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SectionTitle(title: 'General Safety Tips'),
-            SizedBox(height: 10),
-            SectionText(text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...'),
+            SectionTitle(title: 'General Safety Tips', onPressed: () {
+              // Action when the button is pressed
+              print('General Safety Tips button pressed');
+            }),
             SizedBox(height: 20),
-            SectionTitle(title: 'Safety Tips for Traveling Alone'),
-            SizedBox(height: 10),
-            SectionText(text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...'),
+            SectionTitle(title: 'Safety Tips for Traveling Alone', onPressed: () {
+             // Action when the button is pressed
+              print('Safety Tips for Traveling Alone button pressed');
+            }),
             SizedBox(height: 20),
-            SectionTitle(title: 'Safety Tips for Public Transport'),
-            SizedBox(height: 10),
-            SectionText(text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...'),
+            SectionTitle(title: 'Safety Tips for Public Transport', onPressed: () {
+              // Action when the button is pressed
+              print('Safety Tips for Public Transport button pressed');
+            }),
           ],
         ),
       ),
@@ -34,31 +38,30 @@ class SafetyTips extends StatelessWidget {
 
 class SectionTitle extends StatelessWidget {
   final String title;
+  final VoidCallback? onPressed;
 
-  const SectionTitle({required this.title});
+  const SectionTitle({required this.title, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.symmetric(vertical: 20.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        child: Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-    );
-  }
-}
-
-class SectionText extends StatelessWidget {
-  final String text;
-
-  const SectionText({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(fontSize: 16),
     );
   }
 }

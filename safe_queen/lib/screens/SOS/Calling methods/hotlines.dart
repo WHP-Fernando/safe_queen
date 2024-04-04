@@ -1,5 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Hotline App',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: HotlineList(),
+    );
+  }
+}
 
 class HotlineList extends StatelessWidget {
   @override
@@ -14,7 +35,7 @@ class HotlineList extends StatelessWidget {
           Center(
             child: Text(
               'Women Safety Hotlines \n         In Sri Lanka',
-              style: TextStyle(fontSize: 24,fontWeight: FontWeight.bold,),
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
           SizedBox(height: 20), // Add spacing
@@ -80,5 +101,29 @@ class HotlineTile extends StatelessWidget {
   // Function to make direct call
   void directCall(String number) async {
     await FlutterPhoneDirectCaller.callNumber(number);
+
+    // Query Firestore to find existing document with the given number
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('hotlines')
+        .where('number', isEqualTo: number)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      // If document exists, update its data
+      snapshot.docs.forEach((doc) {
+        doc.reference.update({
+          'title': title,
+          'number': number,
+          'lastCalled': DateTime.now(),
+        });
+      });
+    } else {
+      // If document doesn't exist, create a new one
+      await FirebaseFirestore.instance.collection('hotlines').add({
+        'title': title,
+        'number': number,
+        'lastCalled': DateTime.now(),
+      });
+    }
   }
 }

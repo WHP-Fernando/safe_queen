@@ -1,5 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Institution List',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: InstitutionList(),
+    );
+  }
+}
 
 class InstitutionList extends StatelessWidget {
   @override
@@ -29,30 +50,32 @@ class InstitutionList extends StatelessWidget {
             phoneNumber: '011 2186055', // Add phone number for direct call
           ),
           InstitutionTile(
-          name: 'Sri Lanka Police - Women Support', 
-          location: '0112 444 444', 
-          phoneNumber: '0112 444 444',
+            name: 'Sri Lanka Police - Women Support',
+            location: '0112 444 444',
+            phoneNumber: '0112 444 444',
           ),
           InstitutionTile(
-          name: 'Ministry of Women’s Empowerment and Social Welfare', 
-          location: '2368072', 
-          phoneNumber: '2368072',
+            name: 'Ministry of Women’s Empowerment and Social Welfare',
+            location: '2368072',
+            phoneNumber: '2368072',
           ),
           InstitutionTile(
-          name: 'Women Development Centre', 
-          location: '94 081 2234511', 
-          phoneNumber: '94 081 2228158',
-          ),// Add more InstitutionTiles for other institutions
-          InstitutionTile(
-          name: 'Suriya Women Development Organisation', 
-          location: '+94 (0)65 222 3297', 
-          phoneNumber: '+94 (0)65 222 3297',
+            name: 'Women Development Centre',
+            location: '94 081 2234511',
+            phoneNumber: '94 081 2228158',
           ),
           InstitutionTile(
-          name: 'General Hospital', 
-          location: '011-2691111', 
-          phoneNumber: '011-2691111',
-          ),// Add m// Example:
+            name: 'Suriya Women Development Organisation',
+            location: '+94 (0)65 222 3297',
+            phoneNumber: '+94 (0)65 222 3297',
+          ),
+          InstitutionTile(
+            name: 'General Hospital',
+            location: '011-2691111',
+            phoneNumber: '011-2691111',
+          ),
+          // Add more InstitutionTiles for other institutions
+          // Example:
           // InstitutionTile(
           //   name: 'Institution Name',
           //   location: 'Location',
@@ -91,10 +114,11 @@ class InstitutionTile extends StatelessWidget {
         trailing: ElevatedButton(
           onPressed: () {
             directCall(phoneNumber); // Call directCall function with phoneNumber
+            updateOrAddInstitution(name, location, phoneNumber); // Update or add institution data in Firestore
           },
           style: ElevatedButton.styleFrom(
-            backgroundColor: Colors.greenAccent, 
-        ),
+            backgroundColor: Colors.greenAccent,
+          ),
           child: Text('Call'),
         ),
       ),
@@ -104,5 +128,33 @@ class InstitutionTile extends StatelessWidget {
   // Function to make direct call
   void directCall(String phoneNumber) async {
     await FlutterPhoneDirectCaller.callNumber(phoneNumber);
+  }
+
+  // Function to update or add institution data in Firestore
+  void updateOrAddInstitution(String name, String location, String phoneNumber) async {
+    // Query Firestore to find existing document with the given name
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('institutions')
+        .where('name', isEqualTo: name)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      // If document exists, update its data
+      snapshot.docs.forEach((doc) {
+        doc.reference.update({
+          'location': location,
+          'phoneNumber': phoneNumber,
+          'lastCalled': DateTime.now(),
+        });
+      });
+    } else {
+      // If document doesn't exist, create a new one
+      await FirebaseFirestore.instance.collection('institutions').add({
+        'name': name,
+        'location': location,
+        'phoneNumber': phoneNumber,
+        'lastCalled': DateTime.now(),
+      });
+    }
   }
 }

@@ -14,17 +14,29 @@ class LegalInfo extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SectionTitle(title: 'Terms and Conditions'),
-            SizedBox(height: 10),
-            SectionText(text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...'),
+            SectionTitle(
+              title: 'Laws and Regulations',
+              onPressed: () {
+                // Action when the button is pressed
+                print('Laws and Regulations button pressed');
+              },
+            ),
             SizedBox(height: 20),
-            SectionTitle(title: 'Privacy Policy'),
-            SizedBox(height: 10),
-            SectionText(text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...'),
+            SectionTitle(
+              title: 'Legal Rights and Responsibilities',
+              onPressed: () {
+                // Action when the button is pressed
+                print('Legal Rights and Responsibilities button pressed');
+              },
+            ),
             SizedBox(height: 20),
-            SectionTitle(title: 'Disclaimer'),
-            SizedBox(height: 10),
-            SectionText(text: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit...'),
+            SectionTitle(
+              title: 'Legal Assistance and Support',
+              onPressed: () {
+                // Action when the button is pressed
+                print('Legal Assistance and Support button pressed');
+              },
+            ),
           ],
         ),
       ),
@@ -34,31 +46,30 @@ class LegalInfo extends StatelessWidget {
 
 class SectionTitle extends StatelessWidget {
   final String title;
+  final VoidCallback? onPressed;
 
-  const SectionTitle({required this.title});
+  const SectionTitle({required this.title, this.onPressed});
 
   @override
   Widget build(BuildContext context) {
-    return Text(
-      title,
-      style: TextStyle(
-        fontSize: 24,
-        fontWeight: FontWeight.bold,
+    return Container(
+      width: double.infinity,
+      child: ElevatedButton(
+        onPressed: onPressed,
+        style: ElevatedButton.styleFrom(
+          padding: EdgeInsets.symmetric(vertical: 20.0),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10.0),
+          ),
+        ),
+        child: Text(
+          title,
+          style: TextStyle(
+            fontSize: 18,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
       ),
-    );
-  }
-}
-
-class SectionText extends StatelessWidget {
-  final String text;
-
-  const SectionText({required this.text});
-
-  @override
-  Widget build(BuildContext context) {
-    return Text(
-      text,
-      style: TextStyle(fontSize: 16),
     );
   }
 }

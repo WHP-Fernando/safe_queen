@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:safe_queen/screens/home/community.dart';
-import 'package:safe_queen/screens/home/guardian_circle.dart';
+import 'package:safe_queen/screens/home/Community_chat.dart';
+import 'package:safe_queen/screens/SOS/sos.dart';
+import 'package:safe_queen/screens/chatbot/chat_bot.dart';
+import 'package:safe_queen/screens/guardian%20circle/guardian.dart';
 import 'package:safe_queen/screens/home/legal_info.dart';
 import 'package:safe_queen/screens/home/safe_transport.dart';
 import 'package:safe_queen/screens/home/safety_tips.dart';
-import 'package:safe_queen/screens/profile.dart';
+import 'package:safe_queen/screens/profiles/profile.dart';
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -14,11 +16,9 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  // Define colors
   final Color bgWhite = Color(0xFFFFFFFF);
   final Color homeTextColor = Colors.black;
 
-  // Define text styles
   final TextStyle homeTextStyle = TextStyle(
     color: Colors.black,
     fontSize: 20,
@@ -27,16 +27,15 @@ class _HomeState extends State<Home> {
 
   int _selectedIndex = 0;
 
-
   void _onItemTapped(int index) {
     switch (index) {
-      case 1: // Guardian Circle
-        Navigator.push(context, MaterialPageRoute(builder: (context) => GuardianCircle()));
+      case 1:
+        Navigator.push(context, MaterialPageRoute(builder: (context) => GuardianScreen()));
         break;
-      case 2: // Community
-        Navigator.push(context, MaterialPageRoute(builder: (context) => Community()));
+      case 2:
+        Navigator.push(context, MaterialPageRoute(builder: (context) => CommunityChat()));
         break;
-      case 3: // Profile
+      case 3:
         Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
         break;
       default:
@@ -55,41 +54,106 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: bgWhite,
-          // Remove the ElevatedButton from the actions list
-          actions: [],
+          actions: [
+            InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => ChatScreen()));
+              },
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(8.0, 0.0, 8.0, 8.0),
+                child: Image.asset(
+                  'assets/images/8943377.png',
+                  width: 50,
+                  height: 50,
+                ),
+              ),
+            ),
+          ],
         ),
         body: Padding(
-          padding: EdgeInsets.symmetric(horizontal: 20.0, vertical: 40.0), // Increased vertical padding
+          padding: EdgeInsets.symmetric(horizontal: 10.0, vertical: 10.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
                 "Hi Welcome Queen !",
-                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+                style: TextStyle(
+                  fontSize: 25,
+                   fontWeight: FontWeight.bold,
+                   fontFamily: 'Montserrat',
+                   foreground: Paint()..shader = LinearGradient(
+                    colors: [Color.fromARGB(255, 190, 33, 93), Color.fromARGB(255, 204, 33, 144)],
+                    ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
+                    shadows: [
+                      Shadow(
+                        blurRadius: 5.0,
+                        color: Colors.black.withOpacity(0.5),
+                        offset: Offset(2.0, 2.0),
+                      )
+                    ]
+                    ),
               ),
-              SizedBox(height: 50), // Increased space between the text and the curved squares
-              SizedBox(
-                height: 200, // Increased height of the ListView
+              SizedBox(height: 20),
+              Container(
+                child: Text(
+                  "Swipe left to discover more about Safety features and legal information.",
+                  style: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black87,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Roboto',
+                  ),
+                  textAlign: TextAlign.center,
+                ),
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+              ),
+              SizedBox(height: 0),
+              Expanded(
                 child: ListView(
-                  scrollDirection: Axis.horizontal,
+                  scrollDirection: Axis.vertical,
                   children: [
+                    SizedBox(height: 20),
                     _buildCurvedSquare("Safe Transport Options", "assets/images/img_rectangle_48.png", "Ensure safe travel", () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => SafeTransport()));
                     }),
+                    SizedBox(height: 20),
                     _buildCurvedSquare("Safety Tips", "assets/images/img_rectangle_47.png", "Stay informed", () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => SafetyTips()));
                     }),
-                    _buildCurvedSquare("Legal Infomation", "assets/images/img_rectangle_49.png", "Know your rights", () {
+                    SizedBox(height: 20),
+                    _buildCurvedSquare("Legal Information", "assets/images/img_rectangle_49.png", "Know your rights", () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => LegalInfo()));
                     }),
                   ],
                 ),
               ),
-              SizedBox(height: 20), // Add space between curved squares and the emergency text
+              SizedBox(height: 30),
               Center(
-                child: Text(
-                  "If you're in emergency",
-                  style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      "If you're in emergency",
+                      style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold),
+                    ),
+                    SizedBox(height: 20),
+                    ElevatedButton(
+                      onPressed: () {
+                        Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SOS()),
+                );
+                      },
+                      child: const Text("SOS", style: TextStyle(fontSize: 16)),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.red,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ],
@@ -99,27 +163,27 @@ class _HomeState extends State<Home> {
           type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[
             BottomNavigationBarItem(
-              icon: Icon(Icons.home, size: 30), // Increase icon size
+              icon: Icon(Icons.home, size: 30),
               label: 'Home',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.circle_outlined, size: 30), // Increase icon size
+              icon: Icon(Icons.circle_outlined, size: 30),
               label: 'Guardian Circle',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.chat, size: 30), // Increase icon size
-              label: 'Community',
+              icon: Icon(Icons.chat_rounded, size: 30),
+              label: 'Community Chat',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person, size: 30), // Increase icon size
+              icon: Icon(Icons.person, size: 30),
               label: 'Profile',
             ),
           ],
           currentIndex: _selectedIndex,
           selectedItemColor: Colors.pink,
           onTap: _onItemTapped,
-          selectedLabelStyle: TextStyle(fontSize: 12), // Increase text size for selected item
-          unselectedLabelStyle: TextStyle(fontSize: 12), // Increase text size for unselected items
+          selectedLabelStyle: TextStyle(fontSize: 12),
+          unselectedLabelStyle: TextStyle(fontSize: 12),
         ),
       ),
     );
@@ -129,8 +193,8 @@ class _HomeState extends State<Home> {
     return GestureDetector(
       onTap: onTap,
       child: Container(
-        width: 300, // Increased width of the squares
-        height: 200, // Increased height of the squares
+        width: double.infinity,
+        height: 200,
         margin: EdgeInsets.symmetric(horizontal: 10),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(20),
@@ -150,7 +214,7 @@ class _HomeState extends State<Home> {
               child: Center(
                 child: Text(
                   text,
-                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold), // Increased font size
+                  style: TextStyle(color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
                 ),
               ),
             ),
@@ -161,7 +225,7 @@ class _HomeState extends State<Home> {
               child: Center(
                 child: Text(
                   description,
-                  style: TextStyle(color: Colors.white, fontSize: 16), // Increased font size
+                  style: TextStyle(color: Colors.white, fontSize: 16),
                 ),
               ),
             ),

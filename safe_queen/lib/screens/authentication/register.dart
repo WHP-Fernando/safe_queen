@@ -73,8 +73,14 @@ class _RegisterState extends State<Register> {
                             contentPadding: EdgeInsets.symmetric(horizontal: 15, vertical: 15),
                             border: InputBorder.none,
                           ),
-                          validator: (val) =>
-                              val!.isEmpty ? "Enter a valid email" : null,
+                          validator: (val) {
+                            if (val!.isEmpty) {
+                              return "Enter a valid email";
+                            } else if (!val.contains('@')) {
+                              return "Enter a valid email with @ sign";
+                            }
+                            return null;
+                          },
                           onChanged: (val) {
                             setState(() {
                               email = val;
@@ -140,12 +146,14 @@ class _RegisterState extends State<Register> {
                       const SizedBox(height: 20),
                       GestureDetector(
                         onTap: () async {
-                          dynamic result = await _auth.registerWithEmailAndPassword(email, password);
+                          if (_formKey.currentState!.validate()) {
+                            dynamic result = await _auth.registerWithEmailAndPassword(email, password);
 
-                          if (result == null) {
-                            setState(() {
-                              error = "Please enter a valid email!";
-                            });
+                            if (result == null) {
+                              setState(() {
+                                error = "The given password is invalid. [Password should be at least 6 characters]$result";
+                              });
+                            }
                           }
                         },
                         child: Container(

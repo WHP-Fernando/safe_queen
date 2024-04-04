@@ -1,19 +1,16 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:safe_queen/screens/guardian%20circle/contact_model.dart';
 
-class Guardian extends StatefulWidget {
+class GuardianScreen extends StatefulWidget {
   @override
-  _GuardianState createState() => _GuardianState();
+  _GuardianScreenState createState() => _GuardianScreenState();
 }
 
-class _GuardianState extends State<Guardian> {
-  List<Map<String, String>> contacts = [];
-
-  // Controllers for the text fields
-  TextEditingController _nameController = TextEditingController();
-  TextEditingController _phoneNumberController = TextEditingController();
+class _GuardianScreenState extends State<GuardianScreen> {
+  late List<Contact> contacts = [];
 
   @override
   void initState() {
@@ -21,24 +18,64 @@ class _GuardianState extends State<Guardian> {
     loadContacts();
   }
 
-  // Function to load contacts from SharedPreferences
-  void loadContacts() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String>? contactsData = prefs.getStringList('contacts');
-    if (contactsData != null) {
+  Future<void> loadContacts() async {
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('contacts')
+          .where('userId', isEqualTo: userId)
+          .get();
       setState(() {
-        contacts = contactsData
-            .map((contact) => Map<String, String>.from(jsonDecode(contact)))
-            .toList();
+        contacts = snapshot.docs.map<Contact>((doc) => Contact(
+          id: doc.id,
+          name: doc['name'],
+          phoneNumber: doc['phoneNumber'],
+        )).toList();
       });
     }
   }
 
-  // Function to save contacts to SharedPreferences
-  void saveContacts() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    List<String> contactsData = contacts.map((contact) => jsonEncode(contact)).toList();
-    prefs.setStringList('contacts', contactsData);
+  Future<void> addContact(Contact contact) async {
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null && contacts.length < 5) {
+      await FirebaseFirestore.instance.collection('contacts').add({
+        'userId': userId,
+        'name': contact.name,
+        'phoneNumber': contact.phoneNumber,
+      });
+      await loadContacts();
+    } else {
+      showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text("Cannot Add Contact"),
+            content: Text("You have reached the maximum limit of contacts (5)."),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.of(context).pop();
+                },
+                child: Text("OK"),
+              ),
+            ],
+          );
+        },
+      );
+    }
+  }
+
+  Future<void> deleteContact(String id) async {
+    await FirebaseFirestore.instance.collection('contacts').doc(id).delete();
+    await loadContacts();
+  }
+
+  Future<void> directCall(String phoneNumber) async {
+    try {
+      await FlutterPhoneDirectCaller.callNumber(phoneNumber);
+    } catch (e) {
+      print("Error while calling: $e");
+    }
   }
 
   @override
@@ -48,126 +85,161 @@ class _GuardianState extends State<Guardian> {
         title: Text(''),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          SizedBox(height: 20),
-          Text(
-            'Add your Trusted Contacts',
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
+          Center(
+            child: Text(
+              "Add Your Trusted Contacts",
+              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
           ),
-          Text(
-            'You can only add 5 contacts',
-            style: TextStyle(
-              fontSize: 16,
-              color: Colors.black38,
+          Center(
+            child: Text(
+              "You Can Add Only 5 Numbers",
+              style: TextStyle(fontSize: 16, color: Colors.grey),
             ),
           ),
+          SizedBox(height: 40.0),
           Expanded(
-            child: Center(
-              child: contacts.isEmpty
-                  ? Text('No contacts added yet')
-                  : ListView.builder(
-                      itemCount: contacts.length,
-                      itemBuilder: (context, index) {
-                        return ListTile(
-                          title: Text(contacts[index]['name']!),
-                          subtitle: Text(contacts[index]['phone']!),
-                          trailing: IconButton(
-                            icon: Icon(Icons.call),
-                            onPressed: () {
-                              // Implement call functionality
-                              // You can use contacts[index]['phone'] to get the number to call
-                            },
-                          ),
-                        );
-                      },
+            child: ListView.builder(
+              itemCount: contacts.length,
+              itemBuilder: (context, index) {
+                final contact = contacts[index];
+                return Padding(
+                  padding: const EdgeInsets.all(9.0),
+                  child: Card(
+                    elevation: 3,
+                    color: Color.fromARGB(210, 249, 243, 243),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(10),
                     ),
-            ),
-          ),
-          Spacer(),
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.blueAccent),
-                borderRadius: BorderRadius.circular(30.0),
-              ),
-              margin: EdgeInsets.all(20.0),
-              child: IconButton(
-                icon: Icon(Icons.add),
-                onPressed: contacts.length >= 5
-                    ? null
-                    : () {
-                        // Show dialog to add contact
-                        showDialog(
-                          context: context,
-                          builder: (BuildContext context) {
-                            return AlertDialog(
-                              title: Text('Add Contact'),
-                              content: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  TextField(
-                                    controller: _nameController,
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter name',
-                                    ),
-                                  ),
-                                  SizedBox(height: 10),
-                                  TextField(
-                                    controller: _phoneNumberController,
-                                    keyboardType: TextInputType.phone,
-                                    decoration: InputDecoration(
-                                      hintText: 'Enter phone number',
-                                    ),
-                                  ),
-                                ],
-                              ),
-                              actions: <Widget>[
-                                TextButton(
-                                  child: Text('Cancel'),
-                                  onPressed: () {
-                                    Navigator.of(context).pop();
-                                  },
-                                ),
-                                TextButton(
-                                  child: Text('Add'),
-                                  onPressed: () {
-                                    // Add contact to the list
-                                    String name = _nameController.text.trim();
-                                    String phone = _phoneNumberController.text.trim();
-                                    if (name.isNotEmpty && phone.isNotEmpty) {
-                                      setState(() {
-                                        contacts.add({'name': name, 'phone': phone});
-                                      });
-                                      _nameController.clear();
-                                      _phoneNumberController.clear();
-                                      saveContacts(); // Save contacts to SharedPreferences
-                                      Navigator.of(context).pop();
-                                    }
-                                  },
-                                ),
-                              ],
-                            );
-                          },
-                        );
-                      },
-              ),
+                    child: ListTile(
+                      title: Text(contact.name),
+                      subtitle: Text(contact.phoneNumber),
+                      trailing: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          IconButton(
+                            icon: Icon(Icons.phone),
+                            onPressed: () {
+                              // Call the function to make a direct call
+                              directCall(contact.phoneNumber);
+                            },
+                            color: Colors.green,
+                          ),
+                          IconButton(
+                            icon: Icon(Icons.camera),
+                            onPressed: () {
+                               
+                              
+                            },
+                            color: Colors.redAccent,
+                          ),
+                           
+                          IconButton(
+                            icon: Icon(Icons.delete),
+                            onPressed: () {
+                              showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return AlertDialog(
+                                    title: Text("Delete Contact"),
+                                    content: Text("Are you sure you want to delete this contact?"),
+                                    actions: [
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                        },
+                                        child: Text("Cancel"),
+                                      ),
+                                      TextButton(
+                                        onPressed: () {
+                                          Navigator.of(context).pop();
+                                          deleteContact(contact.id);
+                                        },
+                                        child: Text("Delete"),
+                                      ),
+                                    ],
+                                  );
+                                },
+                              );
+                            },
+                            color: Colors.redAccent, //change the color of the icon button
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                );
+              },
             ),
           ),
         ],
       ),
+      floatingActionButton: FloatingActionButton(
+        child: Icon(Icons.add),
+        onPressed: () async {
+          final newContact = await showDialog<Contact>(
+            context: context,
+            builder: (context) => AddContactDialog(),
+          );
+          if (newContact != null) {
+            await addContact(newContact);
+          }
+        },
+      ),
     );
   }
+}
+
+class AddContactDialog extends StatefulWidget {
+  @override
+  _AddContactDialogState createState() => _AddContactDialogState();
+}
+
+class _AddContactDialogState extends State<AddContactDialog> {
+  final _nameController = TextEditingController();
+  final _phoneNumberController = TextEditingController();
 
   @override
-  void dispose() {
-    // Clean up the controllers when the widget is disposed
-    _nameController.dispose();
-    _phoneNumberController.dispose();
-    super.dispose();
+  Widget build(BuildContext context) {
+    return AlertDialog(
+      title: Text('Add Contact'),
+      content: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          TextField(
+            controller: _nameController,
+            decoration: InputDecoration(labelText: 'Name'),
+          ),
+          TextField(
+            controller: _phoneNumberController,
+            decoration: InputDecoration(labelText: 'Phone Number'),
+          ),
+        ],
+      ),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.pop(context);
+          },
+          child: Text('Cancel'),
+        ),
+        TextButton(
+          onPressed: () {
+            final name = _nameController.text;
+            final phoneNumber = _phoneNumberController.text;
+            if (name.isNotEmpty && phoneNumber.isNotEmpty) {
+              final newContact =
+                  Contact(id: '', name: name, phoneNumber: phoneNumber);
+              Navigator.pop(context, newContact);
+            } else {
+              // Show error message
+            }
+          },
+          child: Text('Add'),
+        ),
+      ],
+    );
   }
 }

@@ -1,5 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Police List',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: PoliceList(),
+    );
+  }
+}
 
 class PoliceList extends StatefulWidget {
   @override
@@ -87,10 +108,6 @@ class PoliceStationTile extends StatelessWidget {
     required this.number,
   });
 
-  directCall(String phoneNumber) async {
-    await FlutterPhoneDirectCaller.callNumber(phoneNumber);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -125,6 +142,7 @@ class PoliceStationTile extends StatelessWidget {
           ElevatedButton(
             onPressed: () {
               directCall(number);
+              updateOrAddPoliceStation(name, number);
             },
             style: ButtonStyle(
               backgroundColor: MaterialStateProperty.all<Color>(Colors.greenAccent),
@@ -134,6 +152,32 @@ class PoliceStationTile extends StatelessWidget {
         ],
       ),
     );
+  }
+
+  void directCall(String phoneNumber) async {
+    await FlutterPhoneDirectCaller.callNumber(phoneNumber);
+  }
+
+  void updateOrAddPoliceStation(String name, String number) async {
+    QuerySnapshot snapshot = await FirebaseFirestore.instance
+        .collection('policeStations')
+        .where('name', isEqualTo: name)
+        .get();
+
+    if (snapshot.docs.isNotEmpty) {
+      snapshot.docs.forEach((doc) {
+        doc.reference.update({
+          'number': number,
+          'lastCalled': DateTime.now(),
+        });
+      });
+    } else {
+      await FirebaseFirestore.instance.collection('policeStations').add({
+        'name': name,
+        'number': number,
+        'lastCalled': DateTime.now(),
+      });
+    }
   }
 }
 
@@ -150,29 +194,29 @@ class PoliceStation {
 
 // Define a list of police stations
 List<PoliceStation> policeStations = [
-  PoliceStation(name: 'Colombo Police Station', number: '0779083549'),
-  PoliceStation(name: 'Gampaha Police Station', number: '0779083549'), 
-  PoliceStation(name: 'Kalutara Police Station', number: '0779083549'),
-  PoliceStation(name: 'Kandy Police Station', number: '0779083549'),
-  PoliceStation(name: 'Matale Police Station', number: '0779083549'),
-  PoliceStation(name: 'Nuwara Eliya Police Station', number: '0779083549'),
-  PoliceStation(name: 'Galle Police Station', number: '0779083549'),
-  PoliceStation(name: 'Matara Police Station', number: '0779083549'),
-  PoliceStation(name: 'Hambantota Police Station', number: '0779083549'),
-  PoliceStation(name: 'Jaffna Police Station', number: '0779083549'),
-  PoliceStation(name: 'Kilinochchi Police Station', number: '0779083549'),
-  PoliceStation(name: 'Mannar Police Station', number: '0779083549'),
-  PoliceStation(name: 'Vavuniya Police Station', number: '0779083549'),
-  PoliceStation(name: 'Mullaitivu Police Station', number: '0779083549'),
-  PoliceStation(name: 'Batticaloa Police Station', number: '0779083549'),
-  PoliceStation(name: 'Ampara Police Station', number: '0779083549'),
-  PoliceStation(name: 'Trincomalee Police Station', number: '0779083549'),
-  PoliceStation(name: 'Kurunegala Police Station', number: '0779083549'),
-  PoliceStation(name: 'Puttalam Police Station', number: '0779083549'),
-  PoliceStation(name: 'Anuradhapura Police Station', number: '0779083549'),
-  PoliceStation(name: 'Polonnaruwa Police Station', number: '0779083549'),
-  PoliceStation(name: 'Badulla Police Station', number: '0779083549'),
-  PoliceStation(name: 'Moneragala Police Station', number: '0779083549'),
-  PoliceStation(name: 'Ratnapura Police Station', number: '0779083549'),
-  PoliceStation(name: 'Kegalle Police Station', number: '0779083549'),// Add more police stations here as needed
+  PoliceStation(name: 'Colombo Police Station', number: '0112524411'),
+  PoliceStation(name: 'Gampaha Police Station', number: '0332222223'), 
+  PoliceStation(name: 'Kalutara Police Station', number: '0342238884'),
+  PoliceStation(name: 'Kandy Police Station', number: '0812204775'),
+  PoliceStation(name: 'Matale Police Station', number: '0662233558'),
+  PoliceStation(name: 'Nuwara Eliya Police Station', number: '0522224870'),
+  PoliceStation(name: 'Galle Police Station', number: '0912247457'),
+  PoliceStation(name: 'Matara Police Station', number: '0412222259'),
+  PoliceStation(name: 'Tangalle Police Station', number: '0472241604'),
+  PoliceStation(name: 'Jaffna Police Station', number: '0212214063'),
+  PoliceStation(name: 'Kilinochchi Police Station', number: '0212236467'),
+  PoliceStation(name: 'Mannar Police Station', number: '0232251923'),
+  PoliceStation(name: 'Vavuniya Police Station', number: '0242224452'),
+  PoliceStation(name: 'Mullaitivu Police Station', number: '0212290022'),
+  PoliceStation(name: 'Batticaloa Police Station', number: '0652225282'),
+  PoliceStation(name: 'Ampara Police Station', number: '0632224963'),
+  PoliceStation(name: 'Trincomalee Police Station', number: '0262222222'),
+  PoliceStation(name: 'Kurunegala Police Station', number: '0372226204'),
+  PoliceStation(name: 'Puttalam Police Station', number: '0322266493'),
+  PoliceStation(name: 'Anuradhapura Police Station', number: '0252225919'),
+  PoliceStation(name: 'Polonnaruwa Police Station', number: '0272222222'),
+  PoliceStation(name: 'Badulla Police Station', number: '0552232679'),
+  PoliceStation(name: 'Moneragala Police Station', number: '0552277675'),
+  PoliceStation(name: 'Ratnapura Police Station', number: '0452225232'),
+  PoliceStation(name: 'Kegalle Police Station', number: '0352222674'),// Add more police stations here as needed
 ];

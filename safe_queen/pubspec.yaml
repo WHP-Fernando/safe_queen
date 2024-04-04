@@ -41,13 +41,38 @@ dependencies:
   provider: ^6.1.2
   image_picker: ^1.0.7
   permission_handler: ^11.3.1
-  android_intent_plus: ^5.0.1
   image_cropper: ^5.0.1
   path_provider: ^2.1.2
+  url_launcher: ^6.2.5
+  flutter_phone_direct_caller: ^2.1.1
+  google_generative_ai: ^0.2.2 
+  intl: ^0.19.0
+  firebase_storage: ^11.6.11
+  firebase_database: ^10.4.11
+  cloud_firestore: ^4.15.10
+  shared_preferences: ^2.2.2
+  google_maps_flutter: ^2.6.0
+  geolocator: ^11.0.0
+  google_sign_in: ^6.2.1
+  http: ^1.2.1
+  beautiful_soup_dart: ^0.3.0
+  html: ^0.15.4
+  webview_flutter: ^4.7.0
+  mailer: ^6.1.0
+  
+ 
+ 
+ 
+
+ 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_launcher_icons: "^0.13.1"
+  
+ 
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -55,6 +80,11 @@ dev_dependencies:
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
   flutter_lints: ^3.0.0
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "assets/images/img_rectangle_25.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -77,7 +107,11 @@ flutter:
     - assets/images/img_rectangle_49.png
     - assets/images/img_rectangle_47.png
     - assets/images/img_rectangle_48.png
-
+    - assets/images/img_collaborating_in.png
+    - assets/images/hands-people-holding-help-placards-persons-with-signs-asking-help-donations-flat-vector-illustration-support-assistance-charity-concept-banner-website-design-landing-web-page_74855-26040.png
+    - assets/images/74301320-community-concept-type-hug-friendship-logo-vector-removebg-preview.png
+    - assets/images/pngtree-tech-blue-clock-h5-background-material-picture-image_992604.jpg
+    - assets/images/gps-mobile-track-navigate.jpg
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

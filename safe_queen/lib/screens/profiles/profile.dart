@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:safe_queen/screens/home/location.dart';
 import 'package:safe_queen/screens/profiles/about_us.dart';
 import 'package:safe_queen/screens/profiles/edit_profile.dart';
 import 'package:safe_queen/services/auth.dart';
- 
 
 class Profile extends StatelessWidget {
-
   // Create an object from AuthService
   final AuthServices _auth = AuthServices();
 
@@ -13,94 +12,59 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Profile'),
+        title: Text(
+          "Profile",
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        centerTitle: true,
       ),
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            SizedBox(height: 150),
-            TextButton.icon(
+            ProfileButton(
+              icon: Icons.edit,
+              text: 'Edit Your Details',
               onPressed: () {
-                // Navigate to EditProfilePage
-                Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => EditProfile()),
+                );
               },
-              icon: Icon(Icons.edit), // Icon for edit profile
-              label: Text(
-                'Edit Details',
-                style: TextStyle(fontSize: 18), // Adjust font size here
-              ),
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.black, padding: EdgeInsets.symmetric(vertical: 20, horizontal: 100), // Adjust height and width here
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(color: Colors.black), // Add border color here
-                ),
-                backgroundColor: Colors.grey,
-              ),
             ),
             SizedBox(height: 20),
-            TextButton.icon(
+            ProfileButton(
+              icon: Icons.location_city,
+              text: 'My Location',
               onPressed: () {
-                // Navigate to EditProfilePage
-                Navigator.push(context, MaterialPageRoute(builder: (context) => EditProfile()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => LocationDemo()),
+                );
               },
-              icon: Icon(Icons.location_city), // Icon for edit profile
-              label: Text(
-                'My Location',
-                style: TextStyle(fontSize: 18), // Adjust font size here
-              ),
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.black, padding: EdgeInsets.symmetric(vertical: 20, horizontal: 95), // Adjust height and width here
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(color: Colors.black), // Add border color here
-                ),
-                backgroundColor: Colors.grey,
-              ),
             ),
             SizedBox(height: 20),
-            TextButton.icon(
+            ProfileButton(
+              icon: Icons.info,
+              text: 'About Us',
               onPressed: () {
-                // Navigate to AboutUsPage
-                Navigator.push(context, MaterialPageRoute(builder: (context) => AboutUs()));
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutUs()),
+                );
               },
-              icon: Icon(Icons.info), // Icon for about us
-              label: Text(
-                'About us',
-                style: TextStyle(fontSize: 18), // Adjust font size here
-              ),
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.black, padding: EdgeInsets.symmetric(vertical: 20, horizontal: 107), // Adjust height and width here
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(color: Colors.black), // Add border color here
-                ),
-                backgroundColor: Colors.grey,
-              ),
             ),
             SizedBox(height: 20),
-            TextButton.icon(
-              onPressed: () async{
-                // Call the signOut() method from AuthService
+            ProfileButton(
+              icon: Icons.logout,
+              text: 'Sign out',
+              onPressed: () async {
                 await _auth.signOut();
-                // Perform sign-out action
-                // For demonstration purpose, just pop back to the previous screen
                 Navigator.pop(context);
               },
-              icon: Icon(Icons.logout), // Icon for sign out
-              label: Text(
-                'Sign out',
-                style: TextStyle(fontSize: 18), // Adjust font size here
-              ),
-              style: TextButton.styleFrom(
-                foregroundColor: Colors.black, padding: EdgeInsets.symmetric(vertical: 20, horizontal: 107), // Adjust height and width here
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(20),
-                  side: BorderSide(color: Colors.black), // Add border color here
-                ),
-                backgroundColor: Colors.grey,
-              ),
             ),
           ],
         ),
@@ -109,4 +73,35 @@ class Profile extends StatelessWidget {
   }
 }
 
+class ProfileButton extends StatelessWidget {
+  final IconData icon;
+  final String text;
+  final VoidCallback onPressed;
 
+  const ProfileButton({
+    Key? key,
+    required this.icon,
+    required this.text,
+    required this.onPressed,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return ElevatedButton.icon(
+      onPressed: onPressed,
+      icon: Icon(icon),
+      label: Text(
+        text,
+        style: TextStyle(fontSize: 18),
+      ),
+      style: ElevatedButton.styleFrom(
+        foregroundColor: Colors.white, backgroundColor: Colors.pinkAccent,
+        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+          side: BorderSide(color: Colors.black),
+        ),
+      ),
+    );
+  }
+}
