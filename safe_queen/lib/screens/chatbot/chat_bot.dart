@@ -66,7 +66,10 @@ class _ChatScreenState extends State<ChatScreen> {
             Navigator.pop(context); // Navigate back to the home page
           },
         ),
-        title: Text('Chat'), // Add your title here
+        title: Text('AI Chat Bot',
+        textAlign: TextAlign.center,
+          style: TextStyle(fontWeight: FontWeight.bold),
+          ), // Add your title here
       ),
       body: Container(
         decoration: BoxDecoration(

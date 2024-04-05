@@ -5,7 +5,7 @@ import 'package:safe_queen/screens/profiles/edit_profile.dart';
 import 'package:safe_queen/services/auth.dart';
 
 class Profile extends StatelessWidget {
-  // Create an object from AuthService
+  // Create object AuthService for sign out
   final AuthServices _auth = AuthServices();
 
   @override
@@ -21,13 +21,16 @@ class Profile extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      body: Center(
+      body: Container(
+        color: Colors.white, // background color
+        padding: EdgeInsets.all(20),
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            ProfileButton(
+            ProfileCard(
+              title: 'Edit Your Details',
               icon: Icons.edit,
-              text: 'Edit Your Details',
+              textColor: Colors.white, // text color
               onPressed: () {
                 Navigator.push(
                   context,
@@ -36,9 +39,9 @@ class Profile extends StatelessWidget {
               },
             ),
             SizedBox(height: 20),
-            ProfileButton(
+            ProfileCard(
+              title: 'My Location',
               icon: Icons.location_city,
-              text: 'My Location',
               onPressed: () {
                 Navigator.push(
                   context,
@@ -47,9 +50,9 @@ class Profile extends StatelessWidget {
               },
             ),
             SizedBox(height: 20),
-            ProfileButton(
+            ProfileCard(
+              title: 'About Us',
               icon: Icons.info,
-              text: 'About Us',
               onPressed: () {
                 Navigator.push(
                   context,
@@ -58,9 +61,9 @@ class Profile extends StatelessWidget {
               },
             ),
             SizedBox(height: 20),
-            ProfileButton(
+            ProfileCard(
+              title: 'Sign out',
               icon: Icons.logout,
-              text: 'Sign out',
               onPressed: () async {
                 await _auth.signOut();
                 Navigator.pop(context);
@@ -73,33 +76,52 @@ class Profile extends StatelessWidget {
   }
 }
 
-class ProfileButton extends StatelessWidget {
+class ProfileCard extends StatelessWidget {
   final IconData icon;
-  final String text;
+  final String title;
+  final Color textColor;
+  final Color backgroundColor;
   final VoidCallback onPressed;
 
-  const ProfileButton({
+  const ProfileCard({
     Key? key,
     required this.icon,
-    required this.text,
+    required this.title,
+    this.textColor = Colors.white,  //default text color
+    this.backgroundColor = Colors.pinkAccent,  // default card color
     required this.onPressed,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton.icon(
-      onPressed: onPressed,
-      icon: Icon(icon),
-      label: Text(
-        text,
-        style: TextStyle(fontSize: 18),
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
       ),
-      style: ElevatedButton.styleFrom(
-        foregroundColor: Colors.white, backgroundColor: Colors.pinkAccent,
-        padding: EdgeInsets.symmetric(vertical: 15, horizontal: 50),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-          side: BorderSide(color: Colors.black),
+      color: backgroundColor,
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(15),
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                color: Colors.white, // icon color
+              ),
+              SizedBox(width: 15),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: textColor,
+                  fontWeight: FontWeight.bold, // bold font w
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

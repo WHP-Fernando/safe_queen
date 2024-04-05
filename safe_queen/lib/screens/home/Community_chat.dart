@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:flutter/widgets.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart'; // Add this import
 
@@ -144,7 +143,7 @@ class CommunityChat extends StatelessWidget {
                   child: Icon(
                     Icons.image,
                     color: Colors.blue,
-                ),
+                  ),
                 ),
                 SizedBox(width: 8.0),
                 MaterialButton(
@@ -152,7 +151,7 @@ class CommunityChat extends StatelessWidget {
                   textColor: Colors.white,
                   child: Text('Send'),
                   onPressed: () {
-                    _sendMessage();
+                    _sendMessage(context);
                   },
                 ),
               ],
@@ -169,16 +168,38 @@ class CommunityChat extends StatelessWidget {
     return formattedTime;
   }
 
-  void _sendMessage() {
+  void _sendMessage(BuildContext context) {
     String messageText = _messageController.text.trim();
     if (messageText.isNotEmpty) {
-      String sender = FirebaseAuth.instance.currentUser?.email ?? 'Anonymous';
-      FirebaseFirestore.instance.collection('messages').add({
-        'text': messageText,
-        'sender': sender,
-        'timestamp': Timestamp.now(),
-      });
-      _messageController.clear();
+      // Check if message contains bad words
+      if (!containsBadWords(messageText)) {
+        String sender = FirebaseAuth.instance.currentUser?.email ?? 'Anonymous';
+        FirebaseFirestore.instance.collection('messages').add({
+          'text': messageText,
+          'sender': sender,
+          'timestamp': Timestamp.now(),
+        });
+        _messageController.clear();
+      } else {
+        // Show alert dialog notifying the sender about bad words
+        showDialog(
+          context: context,
+          builder: (context) {
+            return AlertDialog(
+              title: Text('Message Contains Bad Words'),
+              content: Text('Your message cannot be sent because it contains inappropriate content.'),
+              actions: <Widget>[
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Text('OK'),
+                ),
+              ],
+            );
+          },
+        );
+      }
     }
   }
 
@@ -197,5 +218,16 @@ class CommunityChat extends StatelessWidget {
         'timestamp': Timestamp.now(),
       });
     }
+  }
+
+  bool containsBadWords(String message) {
+    List<String> badWords = ['shit', 'fuck','arse','bullshit','pissed','lizards','bloody','bastard','motherfucker','damn','bugger','shut',
+    'sexy','sex','fuckyou','go to the hell','gotohell','sonofbitch','son of bitch' ,'chick','dame','moll','doxy','bimbo','bitch']; // List of bad words
+    for (String word in badWords) {
+      if (message.toLowerCase().contains(word)) {
+        return true;
+      }
+    }
+    return false;
   }
 }
