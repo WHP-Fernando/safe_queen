@@ -1,5 +1,13 @@
 import 'package:flutter/material.dart';
- 
+import 'package:safe_queen/screens/home/Safety%20Tips/self_defence.dart';
+import 'package:safe_queen/screens/home/Safety%20Tips/workplace_guide.dart';
+
+void main() {
+  runApp(MaterialApp(
+    debugShowCheckedModeBanner: false,
+    home: SafetyTips(),
+  ));
+}
 
 class SafetyTips extends StatelessWidget {
   const SafetyTips({Key? key}) : super(key: key);
@@ -8,27 +16,52 @@ class SafetyTips extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('Safety Tips'),
+        backgroundColor: Colors.greenAccent, // Change app bar color
+        title: Text(
+          'Safety Tips & Techniques',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        centerTitle: true,
       ),
+      backgroundColor: Color.fromARGB(255, 253, 238, 252), //change background color
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            SectionTitle(title: 'General Safety Tips', onPressed: () {
-              // Action when the button is pressed
-              print('General Safety Tips button pressed');
-            }),
-            SizedBox(height: 20),
-            SectionTitle(title: 'Safety Tips for Traveling Alone', onPressed: () {
-             // Action when the button is pressed
-              print('Safety Tips for Traveling Alone button pressed');
-            }),
-            SizedBox(height: 20),
-            SectionTitle(title: 'Safety Tips for Public Transport', onPressed: () {
-              // Action when the button is pressed
-              print('Safety Tips for Public Transport button pressed');
-            }),
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: SafetyTechniqueButton(
+                buttonText: 'Self-defense techniques',
+                image: 'assets/images/images.jpeg',
+                onPressed: () {
+                   Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => SelfDefenseScreen(),
+                  ),
+                   );
+                },
+              ),
+            ),
+            
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: SafetyTechniqueButton(
+                buttonText: 'Workplace safety guidelines',
+                image: 'assets/images/image.jpeg',
+                onPressed: () {
+                  Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => WorkplaceSafetyScreen(),
+                  ),
+                  );
+                },
+              ),
+            ),
           ],
         ),
       ),
@@ -36,39 +69,54 @@ class SafetyTips extends StatelessWidget {
   }
 }
 
-class SectionTitle extends StatelessWidget {
-  final String title;
-  final VoidCallback? onPressed;
+class SafetyTechniqueButton extends StatelessWidget {
+  final String buttonText;
+  final String image;
+  final VoidCallback onPressed;
 
-  const SectionTitle({required this.title, this.onPressed});
+  const SafetyTechniqueButton({
+    required this.buttonText,
+    required this.image,
+    required this.onPressed,
+  });
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      width: double.infinity,
-      child: ElevatedButton(
-        onPressed: onPressed,
-        style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 20.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0),
+    return InkWell(
+      onTap: onPressed,
+      child: Container(
+        width: double.infinity,
+        height: 200,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(20),
+          image: DecorationImage(
+            image: AssetImage(image),
+            fit: BoxFit.cover,
           ),
         ),
-        child: Text(
-          title,
-          style: TextStyle(
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
+        child: Center(
+          child: Text(
+            buttonText,
+            style: TextStyle(
+              fontSize: 24,
+              fontWeight: FontWeight.bold,
+              color: Colors.white,
+              shadows: [
+                Shadow(
+                  blurRadius: 5,
+                  color: Colors.black,
+                  offset: Offset(1, 1),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
   }
 }
+ 
 
-void main() {
-  runApp(MaterialApp(
-    debugShowCheckedModeBanner: false,
-    home: SafetyTips(),
-  ));
-}
+
+ 
+ 

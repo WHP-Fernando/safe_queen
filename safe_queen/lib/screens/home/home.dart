@@ -16,7 +16,7 @@ class Home extends StatefulWidget {
 }
 
 class _HomeState extends State<Home> {
-  final Color bgWhite = Color(0xFFFFFFFF);
+  final Color bgWhite = Color.fromARGB(255, 253, 238, 252);
   final Color homeTextColor = Colors.black;
 
   final TextStyle homeTextStyle = TextStyle(
@@ -54,6 +54,24 @@ class _HomeState extends State<Home> {
         appBar: AppBar(
           elevation: 0,
           backgroundColor: bgWhite,
+          title: Text(
+            "Hi Welcome Queen !",
+            style: TextStyle(
+              fontSize: 25,
+              fontWeight: FontWeight.bold,
+              fontFamily: 'Montserrat',
+              foreground: Paint()..shader = LinearGradient(
+                colors: [Color.fromARGB(255, 233, 47, 118), Color.fromARGB(255, 204, 33, 144)],
+              ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
+              shadows: [
+                Shadow(
+                  blurRadius: 5.0,
+                  color: Colors.black.withOpacity(0.5),
+                  offset: Offset(2.0, 2.0),
+                )
+              ]
+            ),
+          ),
           actions: [
             InkWell(
               onTap: () {
@@ -75,28 +93,9 @@ class _HomeState extends State<Home> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Text(
-                "Hi Welcome Queen !",
-                style: TextStyle(
-                  fontSize: 25,
-                   fontWeight: FontWeight.bold,
-                   fontFamily: 'Montserrat',
-                   foreground: Paint()..shader = LinearGradient(
-                    colors: [Color.fromARGB(255, 190, 33, 93), Color.fromARGB(255, 204, 33, 144)],
-                    ).createShader(Rect.fromLTWH(0.0, 0.0, 200.0, 70.0)),
-                    shadows: [
-                      Shadow(
-                        blurRadius: 5.0,
-                        color: Colors.black.withOpacity(0.5),
-                        offset: Offset(2.0, 2.0),
-                      )
-                    ]
-                    ),
-              ),
-              SizedBox(height: 20),
               Container(
                 child: Text(
-                  "Swipe left to discover more about Safety features and legal information.",
+                  "Swipe down to discover more about Safety features and legal information.",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black87,
@@ -108,7 +107,6 @@ class _HomeState extends State<Home> {
                 width: double.infinity,
                 padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
               ),
-              SizedBox(height: 0),
               Expanded(
                 child: ListView(
                   scrollDirection: Axis.vertical,
@@ -118,7 +116,7 @@ class _HomeState extends State<Home> {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => SafeTransport()));
                     }),
                     SizedBox(height: 20),
-                    _buildCurvedSquare("Safety Tips", "assets/images/img_rectangle_47.png", "Stay informed", () {
+                    _buildCurvedSquare("Self Defense Techniques", "assets/images/img_rectangle_47.png", "Stay Alert", () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => SafetyTips()));
                     }),
                     SizedBox(height: 20),
@@ -159,6 +157,8 @@ class _HomeState extends State<Home> {
             ],
           ),
         ),
+
+
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[
@@ -184,6 +184,7 @@ class _HomeState extends State<Home> {
           onTap: _onItemTapped,
           selectedLabelStyle: TextStyle(fontSize: 12),
           unselectedLabelStyle: TextStyle(fontSize: 12),
+          backgroundColor: Color.fromARGB(255, 253, 243, 252), //bottom nav bar color
         ),
       ),
     );

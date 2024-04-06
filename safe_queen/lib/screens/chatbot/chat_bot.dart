@@ -60,6 +60,7 @@ class _ChatScreenState extends State<ChatScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+         backgroundColor: Color.fromARGB(255, 253, 238, 252),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
           onPressed: () {

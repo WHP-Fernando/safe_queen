@@ -83,101 +83,108 @@ class _GuardianScreenState extends State<GuardianScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(''),
+        backgroundColor: Color.fromARGB(255, 253, 238, 252),
       ),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Center(
-            child: Text(
-              "Add Your Trusted Contacts",
-              style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+      body: Container(
+        decoration: BoxDecoration(
+          color: Color.fromARGB(255, 253, 238, 252), // Background color
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Center(
+              child: Text(
+                "Add Your Trusted Contacts",
+                style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              ),
             ),
-          ),
-          Center(
-            child: Text(
-              "You Can Add Only 5 Numbers",
-              style: TextStyle(fontSize: 16, color: Colors.grey),
+            Center(
+              child: Text(
+                "You Can Add Only 5 Numbers",
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
             ),
-          ),
-          SizedBox(height: 40.0),
-          Expanded(
-            child: ListView.builder(
-              itemCount: contacts.length,
-              itemBuilder: (context, index) {
-                final contact = contacts[index];
-                return Padding(
-                  padding: const EdgeInsets.all(9.0),
-                  child: Card(
-                    elevation: 3,
-                    color: Color.fromARGB(210, 249, 243, 243),
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: ListTile(
-                      title: Text(contact.name),
-                      subtitle: Text(contact.phoneNumber),
-                      trailing: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          IconButton(
-                            icon: Icon(Icons.phone),
-                            onPressed: () {
-                              // Call the function to make a direct call
-                              directCall(contact.phoneNumber);
-                            },
-                            color: Colors.green,
-                          ),
-                          IconButton(
-                            icon: Icon(Icons.camera),
-                            onPressed: () {
-                               
-                              
-                            },
-                            color: Colors.redAccent,
-                          ),
-                           
-                          IconButton(
-                            icon: Icon(Icons.delete),
-                            onPressed: () {
-                              showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return AlertDialog(
-                                    title: Text("Delete Contact"),
-                                    content: Text("Are you sure you want to delete this contact?"),
-                                    actions: [
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                        },
-                                        child: Text("Cancel"),
-                                      ),
-                                      TextButton(
-                                        onPressed: () {
-                                          Navigator.of(context).pop();
-                                          deleteContact(contact.id);
-                                        },
-                                        child: Text("Delete"),
-                                      ),
-                                    ],
-                                  );
-                                },
-                              );
-                            },
-                            color: Colors.redAccent, //change the color of the icon button
-                          ),
-                        ],
+            SizedBox(height: 40.0),
+            Expanded(
+              child: ListView.builder(
+                itemCount: contacts.length,
+                itemBuilder: (context, index) {
+                  final contact = contacts[index];
+                  return Padding(
+                    padding: const EdgeInsets.all(9.0),
+                    child: Card(
+                      elevation: 3,
+                      color: Color.fromARGB(210, 249, 243, 243),
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ListTile(
+                        title: Text(contact.name),
+                        subtitle: Text(contact.phoneNumber),
+                        trailing: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.phone),
+                              onPressed: () {
+                                // Call the function to make a direct call
+                                directCall(contact.phoneNumber);
+                              },
+                              color: Colors.green,
+                            ),
+                            IconButton(
+                              icon: Icon(Icons.camera),
+                              onPressed: () {
+                                 
+                                
+                              },
+                              color: Colors.redAccent,
+                            ),
+                             
+                            IconButton(
+                              icon: Icon(Icons.delete),
+                              onPressed: () {
+                                showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return AlertDialog(
+                                      title: Text("Delete Contact"),
+                                      content: Text("Are you sure you want to delete this contact?"),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                          },
+                                          child: Text("Cancel"),
+                                        ),
+                                        TextButton(
+                                          onPressed: () {
+                                            Navigator.of(context).pop();
+                                            deleteContact(contact.id);
+                                          },
+                                          child: Text("Delete"),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                              },
+                              color: Colors.redAccent, //change the color of the icon button
+                            ),
+                          ],
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
+        backgroundColor: Color.fromARGB(255, 249, 40, 217),  //button color
+        child: Icon(Icons.add, color: Colors.white),          //icon color
         onPressed: () async {
           final newContact = await showDialog<Contact>(
             context: context,

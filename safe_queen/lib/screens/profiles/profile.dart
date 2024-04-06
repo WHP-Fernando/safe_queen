@@ -12,6 +12,7 @@ class Profile extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 253, 238, 252),
         title: Text(
           "Profile",
           style: TextStyle(
@@ -22,7 +23,7 @@ class Profile extends StatelessWidget {
         centerTitle: true,
       ),
       body: Container(
-        color: Colors.white, // background color
+        color: Color.fromARGB(255, 253, 238, 252), // background color
         padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -68,6 +69,18 @@ class Profile extends StatelessWidget {
                 await _auth.signOut();
                 Navigator.pop(context);
               },
+            ),
+            SizedBox(height: 120),
+            // Add the image at the bottom
+            Expanded(
+              child: Align(
+                alignment: Alignment.bottomCenter,
+                child: Image.asset(
+                  'assets/images/istockphoto-1384434228-612x612-removebg-preview.png', // Adjust the path as needed
+                  width: 500, // Adjust width as needed
+                  height: 500, // Adjust height as needed
+                ),
+              ),
             ),
           ],
         ),

@@ -59,6 +59,7 @@ dependencies:
   html: ^0.15.4
   webview_flutter: ^4.7.0
   mailer: ^6.1.0
+ 
   
  
  
@@ -84,7 +85,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/img_rectangle_25.png"
+  image_path: "assets/images/img_rectangle.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -112,6 +113,28 @@ flutter:
     - assets/images/74301320-community-concept-type-hug-friendship-logo-vector-removebg-preview.png
     - assets/images/pngtree-tech-blue-clock-h5-background-material-picture-image_992604.jpg
     - assets/images/gps-mobile-track-navigate.jpg
+    - assets/images/img_rectangle.png
+    - assets/images/img_rectangle 3.png
+    - assets/images/alone-at-night.jpg
+    - assets/images/future-public-transport-2030-electric-future-london-evening-standard.jpg
+    - assets/images/Depositphotos_8874368_XL-min-scaled.jpg
+    - assets/images/image.jpeg
+    - assets/images/images.jpeg
+    - assets/images/istockphoto-1384434228-612x612-removebg-preview.png
+    - assets/images/self defence techniques/50dbd84e-ba01-4b14-a0f2-f65d1f4a53f0.jpg
+    - assets/images/self defence techniques/download.jpeg
+    - assets/images/self defence techniques/f2262fc3fb55e672728d9a77408eba97.jpg
+    - assets/images/self defence techniques/qxvn9uqewhu1gnesmlei.webp
+    - assets/images/self defence techniques/x85fo2pzy9lww28nq71o.webp
+    - assets/images/self defence techniques/vg29o.jpg
+    - assets/images/self defence techniques/3dc41b549496f9ed2651dc1a1f.jpg.webp
+    - assets/images/self defence techniques/c9777352a8951625ebaf6bf919.jpg.webp
+    - assets/images/self defence techniques/f37c3058c389fdd723577d3894.jpg.webp
+    - assets/images/self defence techniques/ae5f5257f59ad3c8c9128c090e.jpg.webp
+    - assets/images/self defence techniques/images-removebg-preview.png
+ 
+
+
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/assets-and-images/#resolution-aware

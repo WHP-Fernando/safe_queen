@@ -17,7 +17,8 @@ class CommunityChat extends StatelessWidget {
         title: Text(
           'Community Chat',
           textAlign: TextAlign.center,
-          style: TextStyle(fontWeight: FontWeight.bold),
+          style: TextStyle(fontWeight: FontWeight.bold,
+          backgroundColor: Color.fromARGB(255, 253, 238, 252),),
         ),
         centerTitle: true,
         titleSpacing: 0.0,
@@ -142,7 +143,8 @@ class CommunityChat extends StatelessWidget {
                   },
                   child: Icon(
                     Icons.image,
-                    color: Colors.blue,
+                    color: Colors.black54,
+                    size: 30,
                   ),
                 ),
                 SizedBox(width: 8.0),
@@ -222,7 +224,7 @@ class CommunityChat extends StatelessWidget {
 
   bool containsBadWords(String message) {
     List<String> badWords = ['shit', 'fuck','arse','bullshit','pissed','lizards','bloody','bastard','motherfucker','damn','bugger','shut',
-    'sexy','sex','fuckyou','go to the hell','gotohell','sonofbitch','son of bitch' ,'chick','dame','moll','doxy','bimbo','bitch']; // List of bad words
+    'sexy','sex','fuck you','go to the hell','go to hell','son of bitch' ,'chick','dame','moll','doxy','bimbo','bitch','බැල්ලි','ඌ','මූ','අරූ','උබ','වරෙන්','පලයන්','​තෝ']; // List of bad words
     for (String word in badWords) {
       if (message.toLowerCase().contains(word)) {
         return true;

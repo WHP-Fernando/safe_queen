@@ -7,7 +7,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Location Demo',
+      title: 'My Location',
       home: LocationDemo(),
     );
   }
@@ -43,6 +43,7 @@ class _LocationDemoState extends State<LocationDemo> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color.fromARGB(255, 253, 238, 252),
         title: Text(
           "Your Location",
           style: TextStyle(
