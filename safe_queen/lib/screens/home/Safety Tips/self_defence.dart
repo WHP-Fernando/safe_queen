@@ -90,6 +90,11 @@ class SelfDefenseScreen extends StatelessWidget {
 
   List<Map<String, String>> techniques = [
     {
+      'title': 'Use Self Defense Spray',
+      'description': 'If you are in trouble, take your pepper spray or other similar spray and spray the troublemakers eyes or nose.',
+      'image': 'assets/images/self defence techniques/cdf809bd4b28d5abfcf272c4bca01c751bab999d-1642356945-bcac01ef-960x640.jpg',
+    },
+    {
       'title': 'Palm Strike',
       'description': 'Aim for the attacker\'s nose or throat with the base of your palm.',
       'image': 'assets/images/self defence techniques/qxvn9uqewhu1gnesmlei.webp',

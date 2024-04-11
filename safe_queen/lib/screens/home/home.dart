@@ -6,6 +6,7 @@ import 'package:safe_queen/screens/guardian%20circle/guardian.dart';
 import 'package:safe_queen/screens/home/legal_info.dart';
 import 'package:safe_queen/screens/home/safe_transport.dart';
 import 'package:safe_queen/screens/home/safety_tips.dart';
+import 'package:safe_queen/screens/home/Self%20Videos/self_empower.dart';
 import 'package:safe_queen/screens/profiles/profile.dart';
 
 class Home extends StatefulWidget {
@@ -114,10 +115,14 @@ class _HomeState extends State<Home> {
                     SizedBox(height: 20),
                     _buildCurvedSquare("Safe Transport Options", "assets/images/img_rectangle_48.png", "Ensure safe travel", () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => SafeTransport()));
-                    }),
+                    }), 
                     SizedBox(height: 20),
                     _buildCurvedSquare("Self Defense Techniques", "assets/images/img_rectangle_47.png", "Stay Alert", () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => SafetyTips()));
+                    }),
+                      SizedBox(height: 20),
+                    _buildCurvedSquare("Self Empowerment Videos", "assets/images/stock-photo-strong-woman-winning-success-and-life-goals-concept-young-woman-with-arms-flexed-looking-up-to-1614362578.jpg", "Know your worth.", () {
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => SelfEmpowermentPage()));
                     }),
                     SizedBox(height: 20),
                     _buildCurvedSquare("Legal Information", "assets/images/img_rectangle_49.png", "Know your rights", () {

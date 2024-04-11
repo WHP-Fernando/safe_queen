@@ -18,12 +18,14 @@ class CommunityChat extends StatelessWidget {
           'Community Chat',
           textAlign: TextAlign.center,
           style: TextStyle(fontWeight: FontWeight.bold,
-          backgroundColor: Color.fromARGB(255, 253, 238, 252),),
+          ),
         ),
+         backgroundColor: Color.fromARGB(255, 253, 238, 252), //app bar color
         centerTitle: true,
         titleSpacing: 0.0,
         actions: [],
       ),
+      backgroundColor: Color.fromARGB(255, 253, 238, 252), //background color
       body: Column(
         children: [
           Expanded(

@@ -133,7 +133,7 @@ class _GuardianScreenState extends State<GuardianScreen> {
                               color: Colors.green,
                             ),
                             IconButton(
-                              icon: Icon(Icons.camera),
+                              icon: Icon(Icons.share),
                               onPressed: () {
                                  
                                 

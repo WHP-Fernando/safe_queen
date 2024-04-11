@@ -70,7 +70,8 @@ class _ChatScreenState extends State<ChatScreen> {
         title: Text('AI Chat Bot',
         textAlign: TextAlign.center,
           style: TextStyle(fontWeight: FontWeight.bold),
-          ), // Add your title here
+          ),
+          centerTitle: true,  
       ),
       body: Container(
         decoration: BoxDecoration(

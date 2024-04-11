@@ -59,6 +59,12 @@ dependencies:
   html: ^0.15.4
   webview_flutter: ^4.7.0
   mailer: ^6.1.0
+  youtube_player_flutter: ^9.0.0
+  local_auth: ^2.2.0
+ 
+ 
+ 
+ 
  
   
  
@@ -132,7 +138,23 @@ flutter:
     - assets/images/self defence techniques/f37c3058c389fdd723577d3894.jpg.webp
     - assets/images/self defence techniques/ae5f5257f59ad3c8c9128c090e.jpg.webp
     - assets/images/self defence techniques/images-removebg-preview.png
- 
+    - assets/images/self defence techniques/cdf809bd4b28d5abfcf272c4bca01c751bab999d-1642356945-bcac01ef-960x640.jpg
+    - assets/images/stock-photo-strong-woman-winning-success-and-life-goals-concept-young-woman-with-arms-flexed-looking-up-to-1614362578.jpg
+    - assets/images/Screenshot 2024-04-07 at 08.35.55.png
+    - assets/images/Screenshot 2024-04-07 at 08.39.57.png
+    - assets/images/Screenshot 2024-04-07 at 12.11.18.png
+    - assets/images/Screenshot 2024-04-07 at 12.17.20.png
+    - assets/images/Screenshot 2024-04-07 at 12.18.45.png
+    - assets/images/Screenshot 2024-04-07 at 12.26.16.png
+    - assets/images/Screenshot 2024-04-07 at 12.22.32.png
+    - assets/images/Screenshot 2024-04-07 at 12.52.33.png
+    - assets/images/Screenshot 2024-04-07 at 12.55.56.png
+    - assets/images/Screenshot 2024-04-07 at 12.57.48.png
+    - assets/images/Screenshot 2024-04-07 at 13.03.39.png
+    - assets/images/Screenshot 2024-04-07 at 13.08.25.png
+    - assets/images/Screenshot 2024-04-07 at 13.10.08.png
+    - assets/images/IMG_6211.JPG
+    
 
 
 

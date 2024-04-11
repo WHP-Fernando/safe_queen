@@ -31,7 +31,7 @@ class Profile extends StatelessWidget {
             ProfileCard(
               title: 'Edit Your Details',
               icon: Icons.edit,
-              textColor: Colors.white, // text color
+              textColor: Colors.black, // text color
               onPressed: () {
                 Navigator.push(
                   context,
@@ -49,6 +49,17 @@ class Profile extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => LocationDemo()),
                 );
               },
+              ),
+            SizedBox(height: 20),
+            ProfileCard(
+              title: 'Biometric Pattern',
+              icon: Icons.security,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => AboutUsPage()),
+                );
+              },
             ),
             SizedBox(height: 20),
             ProfileCard(
@@ -57,7 +68,7 @@ class Profile extends StatelessWidget {
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AboutUs()),
+                  MaterialPageRoute(builder: (context) => AboutUsPage()),
                 );
               },
             ),
@@ -100,8 +111,8 @@ class ProfileCard extends StatelessWidget {
     Key? key,
     required this.icon,
     required this.title,
-    this.textColor = Colors.white,  //default text color
-    this.backgroundColor = Colors.pinkAccent,  // default card color
+    this.textColor = Colors.black,  //default text color
+    this.backgroundColor =  const Color.fromARGB(255, 255, 95, 146),  // default card color
     required this.onPressed,
   }) : super(key: key);
 
@@ -111,6 +122,7 @@ class ProfileCard extends StatelessWidget {
       elevation: 2,
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(15),
+        side: BorderSide(color: Colors.black, width: 2), //add border color
       ),
       color: backgroundColor,
       child: InkWell(
@@ -122,7 +134,7 @@ class ProfileCard extends StatelessWidget {
             children: [
               Icon(
                 icon,
-                color: Colors.white, // icon color
+                color: Colors.black, // icon color
               ),
               SizedBox(width: 15),
               Text(
