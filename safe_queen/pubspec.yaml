@@ -61,6 +61,8 @@ dependencies:
   mailer: ^6.1.0
   youtube_player_flutter: ^9.0.0
   local_auth: ^2.2.0
+  shake: ^2.2.0
+ 
  
  
  

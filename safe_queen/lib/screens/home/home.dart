@@ -96,7 +96,7 @@ class _HomeState extends State<Home> {
             children: [
               Container(
                 child: Text(
-                  "Swipe down to discover more about Safety features and legal information.",
+                  "Swipe to discover more about Safety features and legal information.",
                   style: TextStyle(
                     fontSize: 16,
                     color: Colors.black87,

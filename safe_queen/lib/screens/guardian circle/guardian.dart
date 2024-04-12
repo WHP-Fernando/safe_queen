@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/services.dart'; // Add import for MethodChannel
 import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
+import 'package:permission_handler/permission_handler.dart'; // Add import for permission_handler
+import 'package:geolocator/geolocator.dart'; // Add import for geolocator package
 import 'package:safe_queen/screens/guardian%20circle/contact_model.dart';
 
 class GuardianScreen extends StatefulWidget {
@@ -11,11 +14,28 @@ class GuardianScreen extends StatefulWidget {
 
 class _GuardianScreenState extends State<GuardianScreen> {
   late List<Contact> contacts = [];
+  late String currentLocation = '';
 
   @override
   void initState() {
     super.initState();
+    _checkPermissions();
     loadContacts();
+  }
+
+  Future<void> _checkPermissions() async {
+    // Check if location permission is granted
+    PermissionStatus locationStatus = await Permission.location.status;
+    if (!locationStatus.isGranted) {
+      // Request location permission
+      await Permission.location.request();
+    }
+    // Check if SMS permission is granted
+    PermissionStatus smsStatus = await Permission.sms.status;
+    if (!smsStatus.isGranted) {
+      // Request SMS permission
+      await Permission.sms.request();
+    }
   }
 
   Future<void> loadContacts() async {
@@ -27,10 +47,10 @@ class _GuardianScreenState extends State<GuardianScreen> {
           .get();
       setState(() {
         contacts = snapshot.docs.map<Contact>((doc) => Contact(
-          id: doc.id,
-          name: doc['name'],
-          phoneNumber: doc['phoneNumber'],
-        )).toList();
+              id: doc.id,
+              name: doc['name'],
+              phoneNumber: doc['phoneNumber'],
+            )).toList();
       });
     }
   }
@@ -50,7 +70,8 @@ class _GuardianScreenState extends State<GuardianScreen> {
         builder: (BuildContext context) {
           return AlertDialog(
             title: Text("Cannot Add Contact"),
-            content: Text("You have reached the maximum limit of contacts (5)."),
+            content:
+                Text("You have reached the maximum limit of contacts (5)."),
             actions: [
               TextButton(
                 onPressed: () {
@@ -75,6 +96,36 @@ class _GuardianScreenState extends State<GuardianScreen> {
       await FlutterPhoneDirectCaller.callNumber(phoneNumber);
     } catch (e) {
       print("Error while calling: $e");
+    }
+  }
+
+  // Method to send SMS using platform channels
+  Future<void> sendSMSAlert(String phoneNumber, String message) async {
+    try {
+      // Get current location
+      Position position =
+          await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      double latitude = position.latitude;
+      double longitude = position.longitude;
+
+      // Construct Google Maps link
+      String mapsLink = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+
+      // Construct message with location link
+      String messageWithLocation = '$message\nLocation: $mapsLink';
+
+      // Check if permission is granted
+      PermissionStatus status = await Permission.sms.status;
+      if (status.isGranted) {
+        // Permission is granted, proceed with sending SMS
+        await MethodChannel('platform_service')
+            .invokeMethod('sendSMSAlert', {'phoneNumber': phoneNumber, 'message': messageWithLocation});
+      } else {
+        // Permission is not granted, handle accordingly (show error message, etc.)
+        print('Permission denied for sending SMS');
+      }
+    } catch (e) {
+      print("Error while sending SMS alert: $e");
     }
   }
 
@@ -133,14 +184,13 @@ class _GuardianScreenState extends State<GuardianScreen> {
                               color: Colors.green,
                             ),
                             IconButton(
-                              icon: Icon(Icons.share),
+                              icon: Icon(Icons.message),
                               onPressed: () {
-                                 
-                                
+                                // Call sendSMSAlert method with relevant phone number and message
+                                sendSMSAlert(contact.phoneNumber, 'Emergency! Need your help!');
                               },
-                              color: Colors.redAccent,
+                              color: Colors.blueAccent,
                             ),
-                             
                             IconButton(
                               icon: Icon(Icons.delete),
                               onPressed: () {
@@ -183,8 +233,8 @@ class _GuardianScreenState extends State<GuardianScreen> {
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Color.fromARGB(255, 249, 40, 217),  //button color
-        child: Icon(Icons.add, color: Colors.white),          //icon color
+        backgroundColor: Color.fromARGB(255, 249, 40, 217), //button color
+        child: Icon(Icons.add, color: Colors.white), //icon color
         onPressed: () async {
           final newContact = await showDialog<Contact>(
             context: context,
@@ -237,8 +287,7 @@ class _AddContactDialogState extends State<AddContactDialog> {
             final name = _nameController.text;
             final phoneNumber = _phoneNumberController.text;
             if (name.isNotEmpty && phoneNumber.isNotEmpty) {
-              final newContact =
-                  Contact(id: '', name: name, phoneNumber: phoneNumber);
+              final newContact = Contact(id: '', name: name, phoneNumber: phoneNumber);
               Navigator.pop(context, newContact);
             } else {
               // Show error message

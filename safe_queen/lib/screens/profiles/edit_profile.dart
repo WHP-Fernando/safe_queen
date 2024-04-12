@@ -208,5 +208,21 @@ class _EditProfileState extends State<EditProfile> {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
       content: Text('Profile saved successfully'),
     ));
+    
+    // Save profile image
+  if (_image != null) {
+    await _saveImage(_image!, userId);
+
+    // Update the image path in the local state
+    final directory = await getApplicationDocumentsDirectory();
+    final imageName = 'profile_$userId.jpg';
+    final imagePath = '${directory.path}/$imageName';
+    
+    setState(() {
+      _image = File(imagePath);
+    });
   }
 }
+  }
+
+
