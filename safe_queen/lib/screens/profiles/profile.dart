@@ -1,7 +1,9 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:safe_queen/screens/home/location.dart';
 import 'package:safe_queen/screens/profiles/about_us.dart';
 import 'package:safe_queen/screens/profiles/edit_profile.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:geolocator/geolocator.dart';
 import 'package:safe_queen/services/auth.dart';
 
 class Profile extends StatelessWidget {
@@ -40,16 +42,7 @@ class Profile extends StatelessWidget {
               },
             ),
             SizedBox(height: 20),
-            ProfileCard(
-              title: 'My Location',
-              icon: Icons.location_city,
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => LocationDemo()),
-                );
-              },
-              ),
+            LocationProfileCard(),
             SizedBox(height: 20),
             ProfileCard(
               title: 'Biometric Pattern',
@@ -149,6 +142,42 @@ class ProfileCard extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+}
+
+class LocationProfileCard extends StatefulWidget {
+  @override
+  _LocationProfileCardState createState() => _LocationProfileCardState();
+}
+
+class _LocationProfileCardState extends State<LocationProfileCard> {
+  // Method to get the current location and launch map application
+  Future<void> _showLocationOnMap() async {
+    // Calling Geolocator to get the current position
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.best,
+    );
+
+    // Getting latitude and longitude from the position object
+    double lat = position.latitude;
+    double long = position.longitude;
+
+    // Using the URL Launcher to open the map application with the current location
+    String url = 'https://www.google.com/maps/search/?api=1&query=$lat,$long';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return ProfileCard(
+      title: 'My Location',
+      icon: Icons.location_city,
+      onPressed: _showLocationOnMap,
     );
   }
 }

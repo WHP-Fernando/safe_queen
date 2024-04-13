@@ -4,7 +4,7 @@ import 'package:safe_queen/screens/SOS/sos.dart';
 import 'package:safe_queen/screens/chatbot/chat_bot.dart';
 import 'package:safe_queen/screens/guardian%20circle/guardian.dart';
 import 'package:safe_queen/screens/home/legal_info.dart';
-import 'package:safe_queen/screens/home/safe_transport.dart';
+import 'package:safe_queen/screens/home/Safe%20Transport%20Options/safe_transport.dart';
 import 'package:safe_queen/screens/home/safety_tips.dart';
 import 'package:safe_queen/screens/home/Self%20Videos/self_empower.dart';
 import 'package:safe_queen/screens/profiles/profile.dart';
@@ -112,19 +112,19 @@ class _HomeState extends State<Home> {
                 child: ListView(
                   scrollDirection: Axis.vertical,
                   children: [
-                    SizedBox(height: 20),
+                    SizedBox(height: 05),
                     _buildCurvedSquare("Safe Transport Options", "assets/images/img_rectangle_48.png", "Ensure safe travel", () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => SafeTransport()));
                     }), 
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     _buildCurvedSquare("Self Defense Techniques", "assets/images/img_rectangle_47.png", "Stay Alert", () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => SafetyTips()));
                     }),
-                      SizedBox(height: 20),
+                      SizedBox(height: 10),
                     _buildCurvedSquare("Self Empowerment Videos", "assets/images/stock-photo-strong-woman-winning-success-and-life-goals-concept-young-woman-with-arms-flexed-looking-up-to-1614362578.jpg", "Know your worth.", () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => SelfEmpowermentPage()));
                     }),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     _buildCurvedSquare("Legal Information", "assets/images/img_rectangle_49.png", "Know your rights", () {
                       Navigator.push(context, MaterialPageRoute(builder: (context) => LegalInfo()));
                     }),
@@ -140,15 +140,15 @@ class _HomeState extends State<Home> {
                       "If you're in emergency",
                       style: TextStyle(color: Colors.red, fontSize: 18, fontWeight: FontWeight.bold),
                     ),
-                    SizedBox(height: 20),
+                    SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: () {
                         Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SOS()),
-                );
+                          context,
+                          MaterialPageRoute(builder: (context) => SOS()),
+                        );
                       },
-                      child: const Text("SOS", style: TextStyle(fontSize: 16)),
+                      child: const Text("SOS CONTACTS", style: TextStyle(fontSize: 16)),
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
                         backgroundColor: Colors.red,
@@ -156,14 +156,13 @@ class _HomeState extends State<Home> {
                         padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
                       ),
                     ),
+                   
                   ],
                 ),
               ),
             ],
           ),
         ),
-
-
         bottomNavigationBar: BottomNavigationBar(
           type: BottomNavigationBarType.fixed,
           items: const <BottomNavigationBarItem>[

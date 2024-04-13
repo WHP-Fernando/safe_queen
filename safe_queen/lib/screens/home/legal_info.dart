@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:safe_queen/screens/home/Legal%20Info/Legal_rights.dart';
 import 'package:safe_queen/screens/home/Legal%20Info/Legal_support.dart';
+import 'package:safe_queen/screens/home/Legal%20Info/extract_UNWomens.dart';
 import 'package:safe_queen/screens/home/Legal%20Info/laws_regulation.dart';
 
 class LegalInfo extends StatelessWidget {
@@ -49,6 +50,19 @@ class LegalInfo extends StatelessWidget {
                 );
               },
             ),
+             SizedBox(height: 20),
+            SectionTitle(
+              title: 'Fighting Domestic Violence',
+              onPressed: () {
+                // Navigate to LegalAssistanceAndSupportScreen
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => MyWebExtractorApp(),
+                  ),
+                );
+              },
+            ),
             SizedBox(height: 20),
             SectionTitle(
               title: 'Legal Assistance and Support',
@@ -61,6 +75,8 @@ class LegalInfo extends StatelessWidget {
                   ),
                 );
               },
+              buttonColor: Colors.green, // Change button background color to orange
+              borderColor: Colors.black, // Change button border color to orange
             ),
           ],
         ),
@@ -72,8 +88,10 @@ class LegalInfo extends StatelessWidget {
 class SectionTitle extends StatelessWidget {
   final String title;
   final VoidCallback? onPressed;
+  final Color? buttonColor;
+  final Color? borderColor;
 
-  const SectionTitle({required this.title, this.onPressed});
+  const SectionTitle({required this.title, this.onPressed, this.buttonColor, this.borderColor});
 
   @override
   Widget build(BuildContext context) {
@@ -82,10 +100,12 @@ class SectionTitle extends StatelessWidget {
       child: ElevatedButton(
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
-          padding: EdgeInsets.symmetric(vertical: 20.0), backgroundColor: Colors.blue,
+          padding: EdgeInsets.symmetric(vertical: 20.0),
+          backgroundColor: buttonColor ?? Colors.blue, // Set button background color to orange if provided, else blue
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
-          ), // Change button color to blue
+            side: BorderSide(color: borderColor ?? Colors.blue), // Set button border color to orange if provided, else blue
+          ),
         ),
         child: Text(
           title,
