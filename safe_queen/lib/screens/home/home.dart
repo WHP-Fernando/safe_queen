@@ -1,13 +1,79 @@
 import 'package:flutter/material.dart';
-import 'package:safe_queen/screens/home/Community_chat.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
+import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
+import 'package:flutter/services.dart';
+import 'package:permission_handler/permission_handler.dart'; // Import PermissionHandler
+import 'package:geolocator/geolocator.dart'; // Import Geolocator
 import 'package:safe_queen/screens/SOS/sos.dart';
 import 'package:safe_queen/screens/chatbot/chat_bot.dart';
+import 'package:safe_queen/screens/home/Community_chat.dart';
 import 'package:safe_queen/screens/guardian%20circle/guardian.dart';
 import 'package:safe_queen/screens/home/legal_info.dart';
 import 'package:safe_queen/screens/home/Safe%20Transport%20Options/safe_transport.dart';
 import 'package:safe_queen/screens/home/safety_tips.dart';
 import 'package:safe_queen/screens/home/Self%20Videos/self_empower.dart';
 import 'package:safe_queen/screens/profiles/profile.dart';
+
+void main() {
+  runApp(Myone());
+}
+
+class Myone extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Back Button in AppBar',
+      home: Home(), // Directly use the Home widget as the main screen
+    );
+  }
+
+  // Method to send emergency alerts
+  void sendEmergencyAlert(BuildContext context) async {
+    // Fetch the list of trusted contacts from Firestore
+    String? userId = FirebaseAuth.instance.currentUser?.uid;
+    if (userId != null) {
+      final snapshot = await FirebaseFirestore.instance
+          .collection('contacts')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      // Iterate through the list of contacts and send emergency alerts
+      snapshot.docs.forEach((doc) async {
+        String phoneNumber = doc['phoneNumber'];
+        await sendSMSAlert(phoneNumber, 'Emergency! Need your help!');
+      });
+    }
+  }
+
+  // Method to send SMS using platform channels
+  Future<void> sendSMSAlert(String phoneNumber, String message) async {
+    try {
+      // Get current location
+      Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+      double latitude = position.latitude;
+      double longitude = position.longitude;
+
+      // Construct Google Maps link
+      String mapsLink = 'https://www.google.com/maps/search/?api=1&query=$latitude,$longitude';
+
+      // Construct message with location link
+      String messageWithLocation = '$message\nLocation: $mapsLink';
+
+      // Check if permission is granted
+      PermissionStatus status = await Permission.sms.status;
+      if (status.isGranted) {
+        // Permission is granted, proceed with sending SMS
+        await MethodChannel('platform_service')
+            .invokeMethod('sendSMSAlert', {'phoneNumber': phoneNumber, 'message': messageWithLocation});
+      } else {
+        // Permission is not granted, handle accordingly (show error message, etc.)
+        print('Permission denied for sending SMS');
+      }
+    } catch (e) {
+      print("Error while sending SMS alert: $e");
+    }
+  }
+}
 
 class Home extends StatefulWidget {
   const Home({Key? key}) : super(key: key);
@@ -143,20 +209,33 @@ class _HomeState extends State<Home> {
                     SizedBox(height: 10),
                     ElevatedButton(
                       onPressed: () {
+                        Myone().sendEmergencyAlert(context);  
+                      },
+                      child: const Text("SOS Guardian", style: TextStyle(fontSize: 16)),
+                      style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Colors.red,
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
+                      ),
+                    ),
+                    SizedBox(height: 10),  
+                    ElevatedButton(  
+                      onPressed: () {
                         Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => SOS()),
                         );
+                      // Add your onPressed functionality here
                       },
-                      child: const Text("SOS CONTACTS", style: TextStyle(fontSize: 16)),
+                      child: const Text("SOS Contacts", style: TextStyle(fontSize: 16)), // Customize button text
                       style: ElevatedButton.styleFrom(
                         foregroundColor: Colors.white,
-                        backgroundColor: Colors.red,
-                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                        padding: EdgeInsets.symmetric(horizontal: 40, vertical: 16),
+                        backgroundColor: Colors.blue, // Customize button color
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)),
+                        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 16),
                       ),
                     ),
-                   
                   ],
                 ),
               ),

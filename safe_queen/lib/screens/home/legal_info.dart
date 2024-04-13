@@ -17,9 +17,9 @@ class LegalInfo extends StatelessWidget {
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
         centerTitle: true,
-        backgroundColor: Colors.yellow, // Change app bar color to yellow
+        backgroundColor: Colors.yellow,  
       ),
-      backgroundColor: Color.fromARGB(255, 253, 238, 252), //change background color
+      backgroundColor: Color.fromARGB(255, 253, 238, 252),  
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.0),
         child: Column(
@@ -27,8 +27,7 @@ class LegalInfo extends StatelessWidget {
           children: [
             SectionTitle(
               title: 'Laws and Regulations',
-              onPressed: () {
-                // Navigate to LawsAndRegulationsScreen
+              onPressed: () { 
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -40,8 +39,7 @@ class LegalInfo extends StatelessWidget {
             SizedBox(height: 20),
             SectionTitle(
               title: 'Legal Rights and Responsibilities',
-              onPressed: () {
-                // Navigate to LegalRightsAndResponsibilitiesScreen
+              onPressed: () { 
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -53,8 +51,7 @@ class LegalInfo extends StatelessWidget {
              SizedBox(height: 20),
             SectionTitle(
               title: 'Fighting Domestic Violence',
-              onPressed: () {
-                // Navigate to LegalAssistanceAndSupportScreen
+              onPressed: () { 
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -67,7 +64,6 @@ class LegalInfo extends StatelessWidget {
             SectionTitle(
               title: 'Legal Assistance and Support',
               onPressed: () {
-                // Navigate to LegalAssistanceAndSupportScreen
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -75,8 +71,8 @@ class LegalInfo extends StatelessWidget {
                   ),
                 );
               },
-              buttonColor: Colors.green, // Change button background color to orange
-              borderColor: Colors.black, // Change button border color to orange
+              buttonColor: Colors.green,  
+              borderColor: Colors.black,  
             ),
           ],
         ),
@@ -101,10 +97,10 @@ class SectionTitle extends StatelessWidget {
         onPressed: onPressed,
         style: ElevatedButton.styleFrom(
           padding: EdgeInsets.symmetric(vertical: 20.0),
-          backgroundColor: buttonColor ?? Colors.blue, // Set button background color to orange if provided, else blue
+          backgroundColor: buttonColor ?? Colors.blue,  
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
-            side: BorderSide(color: borderColor ?? Colors.blue), // Set button border color to orange if provided, else blue
+            side: BorderSide(color: borderColor ?? Colors.blue),  
           ),
         ),
         child: Text(
@@ -112,7 +108,7 @@ class SectionTitle extends StatelessWidget {
           style: TextStyle(
             fontSize: 18,
             fontWeight: FontWeight.bold,
-            color: Colors.white, // Change text color to white
+            color: Colors.white,  
           ),
         ),
       ),

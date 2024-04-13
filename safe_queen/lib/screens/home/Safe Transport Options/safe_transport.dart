@@ -100,7 +100,7 @@ class SafeTransport extends StatelessWidget {
     );
   }
 
-  // Function to push safety details to Firebase Realtime Database
+  // push safety details to Firebase Realtime Database
   void pushSafetyDetails() {
     try {
       DatabaseReference reference = FirebaseDatabase.instance.reference().child('safety_details');

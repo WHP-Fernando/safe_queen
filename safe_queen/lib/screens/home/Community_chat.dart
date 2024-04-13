@@ -19,12 +19,12 @@ class CommunityChat extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Color.fromARGB(255, 253, 238, 252), //app bar color
+        backgroundColor: Color.fromARGB(255, 253, 238, 252), 
         centerTitle: true,
         titleSpacing: 0.0,
         actions: [],
       ),
-      backgroundColor: Color.fromARGB(255, 253, 238, 252), //background color
+      backgroundColor: Color.fromARGB(255, 253, 238, 252),  
       body: Column(
         children: [
           Expanded(
@@ -66,7 +66,7 @@ class CommunityChat extends StatelessWidget {
                               : MainAxisAlignment.start,
                           children: [
                             if (!isCurrentUser)
-                              // Show avatar if it's not the current user's message
+                              // Avatar display it's not the current user's message
                               CircleAvatar(
                                 backgroundColor: Colors.blue,
                                 child: Text(

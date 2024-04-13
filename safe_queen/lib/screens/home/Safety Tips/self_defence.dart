@@ -18,13 +18,13 @@ class SelfDefenseScreen extends StatelessWidget {
         title: Text(
           'Self-defense Techniques',
           style: TextStyle(
-            fontWeight: FontWeight.bold, // Make the title bold
+            fontWeight: FontWeight.bold,  
           ),
         ),
         backgroundColor: Colors.greenAccent,
         centerTitle: true,
       ),
-      backgroundColor: Color.fromARGB(255, 253, 238, 252), //change background color
+      backgroundColor: Color.fromARGB(255, 253, 238, 252),  
       body: ListView.builder(
         itemCount: techniques.length, // number count
         itemBuilder: (context, index) {

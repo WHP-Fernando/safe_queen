@@ -17,7 +17,7 @@ class SafetyTips extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.greenAccent, // Change app bar color
+        backgroundColor: Colors.greenAccent, 
         title: Text(
           'Safety Tips & Techniques',
           style: TextStyle(
@@ -26,7 +26,7 @@ class SafetyTips extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      backgroundColor: Color.fromARGB(255, 253, 238, 252), //change background color
+      backgroundColor: Color.fromARGB(255, 253, 238, 252),  
       body: SingleChildScrollView(
         padding: EdgeInsets.all(20.0),
         child: Column(

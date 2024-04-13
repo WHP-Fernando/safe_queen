@@ -10,15 +10,15 @@ class VideoPlayerPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pinkAccent, // app bar color
+        backgroundColor: Colors.pinkAccent,  
         title: Text('Video Player',
         style: TextStyle(
-            fontWeight: FontWeight.bold,      //bold
+            fontWeight: FontWeight.bold,      
           ),
           ),
           centerTitle: true,
       ),
-      backgroundColor: Color.fromARGB(255, 253, 238, 252), // background color
+      backgroundColor: Color.fromARGB(255, 253, 238, 252),  
       body: Center(
         child: YoutubePlayer(
           controller: controller,

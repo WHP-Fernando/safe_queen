@@ -34,7 +34,7 @@ class _webextracttipsState extends State<webextracttips> {
       ),
       ),
        centerTitle: true,
-        backgroundColor: Colors.greenAccent, // Change app bar color to yellow
+        backgroundColor: Colors.greenAccent,  
       ),
       backgroundColor: Color.fromARGB(255, 253, 238, 252), 
       body: FutureBuilder<Document?>(

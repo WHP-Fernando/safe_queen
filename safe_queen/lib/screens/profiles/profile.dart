@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:safe_queen/screens/profiles/about_us.dart';
+import 'package:safe_queen/screens/profiles/Photovalut.dart';
 import 'package:safe_queen/screens/profiles/edit_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
@@ -25,7 +26,7 @@ class Profile extends StatelessWidget {
         centerTitle: true,
       ),
       body: Container(
-        color: Color.fromARGB(255, 253, 238, 252), // background color
+        color: Color.fromARGB(255, 253, 238, 252),  
         padding: EdgeInsets.all(20),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -33,7 +34,7 @@ class Profile extends StatelessWidget {
             ProfileCard(
               title: 'Edit Your Details',
               icon: Icons.edit,
-              textColor: Colors.black, // text color
+              textColor: Colors.black, 
               onPressed: () {
                 Navigator.push(
                   context,
@@ -45,12 +46,12 @@ class Profile extends StatelessWidget {
             LocationProfileCard(),
             SizedBox(height: 20),
             ProfileCard(
-              title: 'Biometric Pattern',
+              title: 'Photo valut',
               icon: Icons.security,
               onPressed: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (context) => AboutUsPage()),
+                  MaterialPageRoute(builder: (context) => PhotoVaultHomePage()),
                 );
               },
             ),
@@ -75,14 +76,13 @@ class Profile extends StatelessWidget {
               },
             ),
             SizedBox(height: 120),
-            // Add the image at the bottom
             Expanded(
               child: Align(
                 alignment: Alignment.bottomCenter,
                 child: Image.asset(
                   'assets/images/istockphoto-1384434228-612x612-removebg-preview.png', // Adjust the path as needed
-                  width: 500, // Adjust width as needed
-                  height: 500, // Adjust height as needed
+                  width: 500,  
+                  height: 500,  
                 ),
               ),
             ),
@@ -135,7 +135,7 @@ class ProfileCard extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   color: textColor,
-                  fontWeight: FontWeight.bold, // bold font w
+                  fontWeight: FontWeight.bold,  
                 ),
               ),
             ],

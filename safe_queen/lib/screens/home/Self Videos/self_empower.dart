@@ -149,14 +149,15 @@ class SelfEmpowermentPage extends StatelessWidget {
           mute: false,
         ),
       ),
-    }, // Add more videos  
+    }, 
+    // Add more videos  
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.pinkAccent, // app bar color
+        backgroundColor: Colors.pinkAccent,  
         title: Text(
           'Self Empowerment',
           style: TextStyle(
@@ -165,7 +166,7 @@ class SelfEmpowermentPage extends StatelessWidget {
         ),
         centerTitle: true,
       ),
-      backgroundColor: Color.fromARGB(255, 253, 238, 252), // background color
+      backgroundColor: Color.fromARGB(255, 253, 238, 252),  
       body: Column(
         children: [
           Expanded(
@@ -223,7 +224,7 @@ class SelfEmpowermentPage extends StatelessWidget {
               _openYouTubeLink(videos.last['videoId']);
             },
              style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.red, // button background color  
+              backgroundColor: Colors.red,  
             ),
             child: Text("Watch more on YouTube",
             style: TextStyle(color: Colors.white), // text color  

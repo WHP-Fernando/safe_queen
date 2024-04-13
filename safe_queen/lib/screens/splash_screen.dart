@@ -8,7 +8,7 @@ class SplashScreen extends StatelessWidget {
     Future.delayed(Duration(seconds: 2), () {
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => Wrapper()), // Replace SignIn() with your wrapper page
+        MaterialPageRoute(builder: (context) => Wrapper()),  
       );
     });
 
