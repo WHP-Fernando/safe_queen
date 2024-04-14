@@ -34,7 +34,7 @@ class ChatScreen extends StatefulWidget {
 
 class _ChatScreenState extends State<ChatScreen> {
   TextEditingController _userInput = TextEditingController();
-  final apiKey = 'AIzaSyDgXu4mg1oN5vKrxKWIFLqbSTHF7rLSFF4';
+  final apiKey = 'AIzaSyA2lxsPLFmAG3X9klGuiofii49cxMLqVFk';
 
   final List<Message> _messages = [];
 

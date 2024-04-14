@@ -1,23 +1,9 @@
-import 'dart:convert';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:shared_preferences/shared_preferences.dart';
-
-void main() {
-  runApp(PhotoVault());
-}
-
-class PhotoVault extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Photo Vault',
-      home: PhotoVaultHomePage(),
-    );
-  }
-}
+import 'package:firebase_auth/firebase_auth.dart'; // Import FirebaseAuth
+import 'package:cloud_firestore/cloud_firestore.dart'; // Import Firestore
 
 class PhotoVaultHomePage extends StatefulWidget {
   @override
@@ -26,36 +12,49 @@ class PhotoVaultHomePage extends StatefulWidget {
 
 class _PhotoVaultHomePageState extends State<PhotoVaultHomePage> {
   List<File> _photos = [];
-  late SharedPreferences _prefs;
-  late String _userIdentifier; // Unique identifier for the user (e.g., user ID)
+  late String _userIdentifier; // Unique identifier for the user (e.g., email or username)
 
   @override
   void initState() {
     super.initState();
-    _loadUser();
+    _getUserID();
   }
 
-  Future<void> _loadUser() async {
-    _prefs = await SharedPreferences.getInstance();
-    // Replace 'userIdentifier' with the actual unique identifier for the user (e.g., user ID)
-    _userIdentifier = _prefs.getString('userIdentifier') ?? ''; 
-    await _loadPhotos();
+  Future<void> _getUserID() async {
+    // Get the current user's ID
+    User? user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      setState(() {
+        _userIdentifier = user.uid;
+      });
+      await _loadPhotos();
+    } else {
+      // Handle if no user is logged in
+    }
   }
 
   Future<void> _loadPhotos() async {
-    final String? photosJson = _prefs.getString('photos_$_userIdentifier'); 
-    if (photosJson != null) {
-      final List<dynamic> decodedList = jsonDecode(photosJson);
+    // Fetch the user's photos from Firestore
+    final snapshot = await FirebaseFirestore.instance
+        .collection('photos')
+        .doc(_userIdentifier)
+        .get();
+
+    if (snapshot.exists) {
+      // If photos exist, load them into the _photos list
       setState(() {
-        _photos = decodedList.map((path) => File(path)).toList();
+        _photos = List<File>.from(snapshot['paths'].map((path) => File(path)));
       });
     }
   }
 
   Future<void> _savePhotos() async {
-    final List<String> paths = _photos.map((file) => file.path).toList();
-    final String encodedList = jsonEncode(paths);
-    await _prefs.setString('photos_$_userIdentifier', encodedList); 
+    // Save the user's photos to Firestore
+    List<String> paths = _photos.map((file) => file.path).toList();
+    await FirebaseFirestore.instance
+        .collection('photos')
+        .doc(_userIdentifier)
+        .set({'paths': paths});
   }
 
   Future<void> _pickImage(ImageSource source) async {
@@ -68,11 +67,11 @@ class _PhotoVaultHomePageState extends State<PhotoVaultHomePage> {
     }
   }
 
-  void _deletePhoto(int index) {
+  Future<void> _deletePhoto(int index) async {
     setState(() {
       _photos.removeAt(index);
     });
-    _savePhotos();
+    await _savePhotos();
   }
 
   @override
@@ -80,6 +79,12 @@ class _PhotoVaultHomePageState extends State<PhotoVaultHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Photo Vault'),
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () {
+            Navigator.pop(context);
+          },
+        ),
       ),
       body: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
@@ -116,3 +121,4 @@ class _PhotoVaultHomePageState extends State<PhotoVaultHomePage> {
     );
   }
 }
+

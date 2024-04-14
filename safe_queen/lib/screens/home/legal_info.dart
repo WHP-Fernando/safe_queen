@@ -100,7 +100,7 @@ class SectionTitle extends StatelessWidget {
           backgroundColor: buttonColor ?? Colors.blue,  
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(10.0),
-            side: BorderSide(color: borderColor ?? Colors.blue),  
+            side: BorderSide(color: borderColor ?? Colors.black),  
           ),
         ),
         child: Text(

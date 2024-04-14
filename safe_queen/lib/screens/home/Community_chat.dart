@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';  
+import 'package:firebase_storage/firebase_storage.dart';
 
 class CommunityChat extends StatelessWidget {
   final TextEditingController _messageController = TextEditingController();
@@ -19,12 +19,12 @@ class CommunityChat extends StatelessWidget {
           textAlign: TextAlign.center,
           style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: Color.fromARGB(255, 253, 238, 252), 
+        backgroundColor: Color.fromARGB(255, 253, 238, 252),
         centerTitle: true,
         titleSpacing: 0.0,
         actions: [],
       ),
-      backgroundColor: Color.fromARGB(255, 253, 238, 252),  
+      backgroundColor: Color.fromARGB(255, 253, 238, 252),
       body: Column(
         children: [
           Expanded(
@@ -32,7 +32,7 @@ class CommunityChat extends StatelessWidget {
               stream: FirebaseFirestore.instance
                   .collection('messages')
                   .where('timestamp',
-                      isGreaterThanOrEqualTo: DateTime.now()   // after one day message delete automatically
+                      isGreaterThanOrEqualTo: DateTime.now()
                           .subtract(Duration(days: 1)))
                   .orderBy('timestamp', descending: true)
                   .snapshots(),
@@ -140,32 +140,45 @@ class CommunityChat extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: TextField(
-                    controller: _messageController,
-                    decoration: InputDecoration(
-                      hintText: 'Type your message...',
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(30.0),
+                  child: Stack(
+                    children: [
+                      TextField(
+                        controller: _messageController,
+                        decoration: InputDecoration(
+                          hintText: 'Type your message...',
+                          border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(30.0),
+                          ),
+                          filled: true,
+                          fillColor: Colors.grey[200],
+                          contentPadding: EdgeInsets.all(16.0),
+                        ),
                       ),
-                      filled: true,
-                      fillColor: Colors.grey[200],
-                      contentPadding: EdgeInsets.all(16.0),
-                    ),
+                      Positioned(
+                        top: 0,
+                        bottom: 0,
+                        right: 8.0,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          children: [
+                            IconButton(
+                              icon: Icon(Icons.camera_alt, size: 24),
+                              onPressed: () {
+                                _getImageAndSendMessage(context, ImageSource.camera);
+                              },
+                            ),
+                            SizedBox(width: 8.0),
+                            IconButton(
+                              icon: Icon(Icons.photo_library, size: 24),
+                              onPressed: () {
+                                _getImageAndSendMessage(context, ImageSource.gallery);
+                              },
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
-                ),
-                SizedBox(width: 8.0),
-                IconButton(
-                  icon: Icon(Icons.camera_alt, size: 24),
-                  onPressed: () {
-                    _getImageAndSendMessage(context, ImageSource.camera);
-                  },
-                ),
-                SizedBox(width: 8.0),
-                IconButton(
-                  icon: Icon(Icons.photo_library, size: 24),
-                  onPressed: () {
-                    _getImageAndSendMessage(context, ImageSource.gallery);
-                  },
                 ),
                 SizedBox(width: 8.0),
                 MaterialButton(
@@ -199,7 +212,7 @@ class CommunityChat extends StatelessWidget {
       // Check if message contains bad words
       if (!containsBadWords(messageText)) {
         String sender =
-            FirebaseAuth.instance.currentUser?.email ?? 'Anonymous';
+        FirebaseAuth.instance.currentUser?.email ?? 'Anonymous';
         FirebaseFirestore.instance.collection('messages').add({
           'text': messageText,
           'sender': sender,
@@ -283,8 +296,8 @@ class CommunityChat extends StatelessWidget {
 
   bool containsBadWords(String message) {
     List<String> badWords = [
-      'shit','fuck','arse','bullshit','pissed','lizards','bloody','bastard','motherfucker','damn','bugger','shut','sexy','sex','fuck you','go to the hell','go to hell','son of bitch','chick',
-      'dame','moll','doxy','bimbo','bitch','බැල්ලි','ඌ','මූ','අරූ','උබ','වරෙන්','පලයන්','​තෝ'
+      'shit', 'fuck', 'arse', 'bullshit', 'pissed', 'lizards', 'bloody', 'bastard', 'motherfucker', 'damn', 'bugger', 'shut', 'sexy', 'sex', 'fuck you', 'go to the hell', 'go to hell', 'son of bitch', 'chick',
+      'dame', 'moll', 'doxy', 'bimbo', 'bitch', 'බැල්ලි', 'ඌ', 'මූ', 'අරූ', 'උබ', 'වරෙන්', 'පලයන්', '​තෝ'
     ]; // List of bad words
     for (String word in badWords) {
       if (message.toLowerCase().contains(word)) {
