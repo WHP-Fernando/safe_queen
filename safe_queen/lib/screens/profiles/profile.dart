@@ -1,11 +1,12 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:safe_queen/screens/profiles/about_us.dart';
 import 'package:safe_queen/screens/profiles/Photovalut.dart';
-import 'package:safe_queen/screens/profiles/edit_profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:safe_queen/services/auth.dart';
+import 'package:safe_queen/screens/profiles/about_us.dart';
+import 'package:safe_queen/screens/profiles/edit_profile.dart';
+ 
 
 class Profile extends StatelessWidget {
   // Create object AuthService for sign out
@@ -16,25 +17,29 @@ class Profile extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Color.fromARGB(255, 253, 238, 252),
+        elevation: 0,
         title: Text(
           "Profile",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 24,
+            color: Colors.black,
           ),
         ),
         centerTitle: true,
       ),
       body: Container(
-        color: Color.fromARGB(255, 253, 238, 252),  
+        color: Color.fromARGB(255, 253, 238, 252),
         padding: EdgeInsets.all(20),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
+        child: GridView.count(
+          crossAxisCount: 2,
+          crossAxisSpacing: 20,
+          mainAxisSpacing: 20,
           children: [
             ProfileCard(
               title: 'Edit Your Details',
               icon: Icons.edit,
-              textColor: Colors.black, 
+              textColor: Colors.black,
               onPressed: () {
                 Navigator.push(
                   context,
@@ -42,11 +47,8 @@ class Profile extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(height: 20),
-            LocationProfileCard(),
-            SizedBox(height: 20),
             ProfileCard(
-              title: 'Photo valut',
+              title: 'Photo Vault',
               icon: Icons.security,
               onPressed: () {
                 Navigator.push(
@@ -54,8 +56,7 @@ class Profile extends StatelessWidget {
                   MaterialPageRoute(builder: (context) => PhotoVaultHomePage()),
                 );
               },
-            ),
-            SizedBox(height: 20),
+            ), 
             ProfileCard(
               title: 'About Us',
               icon: Icons.info,
@@ -66,92 +67,24 @@ class Profile extends StatelessWidget {
                 );
               },
             ),
-            SizedBox(height: 20),
+            ProfileCard(
+              title: 'My Location',
+              icon: Icons.location_on,
+              onPressed: _showLocationOnMap,
+            ),
             ProfileCard(
               title: 'Sign out',
               icon: Icons.logout,
-              onPressed: () async {
-                await _auth.signOut();
-                Navigator.pop(context);
+              onPressed: () {
+                _showSignOutConfirmationDialog(context);
               },
-            ),
-            SizedBox(height: 120),
-            Expanded(
-              child: Align(
-                alignment: Alignment.bottomCenter,
-                child: Image.asset(
-                  'assets/images/istockphoto-1384434228-612x612-removebg-preview.png', // Adjust the path as needed
-                  width: 500,  
-                  height: 500,  
-                ),
-              ),
             ),
           ],
         ),
       ),
     );
   }
-}
 
-class ProfileCard extends StatelessWidget {
-  final IconData icon;
-  final String title;
-  final Color textColor;
-  final Color backgroundColor;
-  final VoidCallback onPressed;
-
-  const ProfileCard({
-    Key? key,
-    required this.icon,
-    required this.title,
-    this.textColor = Colors.black,  //default text color
-    this.backgroundColor =  const Color.fromARGB(255, 255, 95, 146),  // default card color
-    required this.onPressed,
-  }) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(15),
-        side: BorderSide(color: Colors.black, width: 2), //add border color
-      ),
-      color: backgroundColor,
-      child: InkWell(
-        onTap: onPressed,
-        borderRadius: BorderRadius.circular(15),
-        child: Padding(
-          padding: const EdgeInsets.all(15),
-          child: Row(
-            children: [
-              Icon(
-                icon,
-                color: Colors.black, // icon color
-              ),
-              SizedBox(width: 15),
-              Text(
-                title,
-                style: TextStyle(
-                  fontSize: 18,
-                  color: textColor,
-                  fontWeight: FontWeight.bold,  
-                ),
-              ),
-            ],
-          ),
-        ),
-      ),
-    );
-  }
-}
-
-class LocationProfileCard extends StatefulWidget {
-  @override
-  _LocationProfileCardState createState() => _LocationProfileCardState();
-}
-
-class _LocationProfileCardState extends State<LocationProfileCard> {
   // Method to get the current location and launch map application
   Future<void> _showLocationOnMap() async {
     // Calling Geolocator to get the current position
@@ -172,12 +105,83 @@ class _LocationProfileCardState extends State<LocationProfileCard> {
     }
   }
 
+  // Method to show sign-out confirmation dialog
+  void _showSignOutConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Sign Out"),
+          content: Text("Are you sure you want to sign out?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                await _auth.signOut();
+                Navigator.pop(context); // Close the profile screen
+                Navigator.pop(context); // Close the dialog
+              },
+              child: Text("Sign Out"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+}
+
+class ProfileCard extends StatelessWidget {
+  final IconData icon;
+  final String title;
+  final Color textColor;
+  final VoidCallback onPressed;
+
+  const ProfileCard({
+    Key? key,
+    required this.icon,
+    required this.title,
+    this.textColor = Colors.black,
+    required this.onPressed,
+  }) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
-    return ProfileCard(
-      title: 'My Location',
-      icon: Icons.location_city,
-      onPressed: _showLocationOnMap,
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: InkWell(
+        onTap: onPressed,
+        borderRadius: BorderRadius.circular(15),
+        child: Padding(
+          padding: const EdgeInsets.all(15),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                color: Theme.of(context).primaryColor,
+                size: 48,
+              ),
+              SizedBox(height: 10),
+              Text(
+                title,
+                style: TextStyle(
+                  fontSize: 18,
+                  color: textColor,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }

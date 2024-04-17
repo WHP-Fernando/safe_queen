@@ -74,19 +74,28 @@ class _PhotoVaultHomePageState extends State<PhotoVaultHomePage> {
     await _savePhotos();
   }
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Photo Vault'),
-        leading: IconButton(
-          icon: Icon(Icons.arrow_back),
-          onPressed: () {
-            Navigator.pop(context);
-          },
+ @override
+Widget build(BuildContext context) {
+  return Scaffold(
+    appBar: AppBar(
+      backgroundColor: Color.fromARGB(255, 253, 238, 252),
+      title: Text('Photo Vault',
+        style: TextStyle(
+          fontWeight: FontWeight.bold,
+          fontSize: 20,
         ),
       ),
-      body: GridView.builder(
+      centerTitle: true,
+      leading: IconButton(
+        icon: Icon(Icons.arrow_back),
+        onPressed: () {
+          Navigator.pop(context);
+        },
+      ),
+    ),
+    body: Container(
+      color: Color.fromARGB(255, 253, 238, 252), // Background color added here
+      child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 3,
           crossAxisSpacing: 4.0,
@@ -112,13 +121,13 @@ class _PhotoVaultHomePageState extends State<PhotoVaultHomePage> {
           );
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () async {
-          await _pickImage(ImageSource.gallery);
-        },
-        child: Icon(Icons.add),
-      ),
-    );
-  }
+    ),
+    floatingActionButton: FloatingActionButton(
+      onPressed: () async {
+        await _pickImage(ImageSource.gallery);
+      },
+      child: Icon(Icons.add),
+    ),
+  );
 }
-
+}

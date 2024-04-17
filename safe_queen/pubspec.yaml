@@ -63,6 +63,8 @@ dependencies:
   local_auth: ^2.2.0
   shake: ^2.2.0
   camera: ^0.10.5+9
+  sudoku_dart: ^1.1.0
+ 
  
  
  

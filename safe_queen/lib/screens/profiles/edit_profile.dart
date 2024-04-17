@@ -89,7 +89,7 @@ class _EditProfileState extends State<EditProfile> {
             fontSize: 20,
           ),
         ),
-        centerTitle: true, // Align title to center
+        centerTitle: true,  
       ),
       body: Container(
         color: Color.fromARGB(255, 253, 238, 252), // Set background color here
