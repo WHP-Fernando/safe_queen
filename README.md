@@ -33,7 +33,7 @@ Before you begin, ensure you have the following installed:
     flutter run
     ```
 
-    You should now see the application running on your device/simulator.
+   <span style="color:red">You should now see the application running on your device/simulator.</span>
 
 ### Additional Configuration
 
