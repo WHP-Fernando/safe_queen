@@ -48,11 +48,11 @@ Before you begin, ensure you have the following installed:
 
 ## Support
 
-For any issues or questions regarding the application, please contact me at [support@example.com](himansa2226@gmail.com).
+For any issues or questions regarding the application, please contact me at [himansa2226@gmail.com](himansa2226@gmail.com).
 
 ## Contributors
 
-- W.H.P.Fernando ([@johndoe](https://github.com/johndoe))
+- W.H.P.Fernando ([@WHP-Fernando](https://github.com/WHP-Fernando))
 
 ## License
 
