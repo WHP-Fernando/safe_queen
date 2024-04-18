@@ -1,8 +1,6 @@
 # Safe Queen Application
-
-![Safe Queen Logo](safe_queen_logo.png)
-
 Welcome to Safe Queen, an application designed to enhance women's safety and empowerment through various features including guardian circle, community chat, AI chatbot, photo vault, mini-games, resources, documents, web extraction details, and more.
+
 
 ## Installation Instructions
 
