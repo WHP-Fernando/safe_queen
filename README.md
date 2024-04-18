@@ -6,7 +6,7 @@ Welcome to Safe Queen, an application designed to enhance women's safety and emp
 
 ### Prerequisites
 
-Before you begin, ensure you have the following installed:
+Before you begin, ensure you have the following installed,
 
 - [Flutter SDK](https://flutter.dev/docs/get-started/install)
 - [Firebase Account](https://firebase.google.com/)
@@ -22,12 +22,12 @@ Before you begin, ensure you have the following installed:
     flutter pub get
     ```
 
-4. **Set up Firebase for your project:**
+4. **Set up Firebase for your project -:**
    - Create a new Firebase project on the [Firebase Console](https://console.firebase.google.com/).
    - Follow the instructions to add your Flutter app to the Firebase project.
    - Download the `google-services.json` file for Android or `GoogleService-Info.plist` file for iOS from Firebase and place it in the appropriate directories (`android/app` for Android and `ios/Runner` for iOS).
 
-5. **Run the application on your device or simulator:**
+5. **Run the application on your device or simulator -:**
 
     ```bash
     flutter run
