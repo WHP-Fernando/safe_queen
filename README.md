@@ -1,5 +1,7 @@
 # Safe Queen Application
 
+![Safe Queen Logo](safe_queen_logo.png)
+
 Welcome to Safe Queen, an application designed to enhance women's safety and empowerment through various features including guardian circle, community chat, AI chatbot, photo vault, mini-games, resources, documents, web extraction details, and more.
 
 ## Installation Instructions
@@ -18,7 +20,7 @@ Before you begin, ensure you have the following installed:
 2. **Navigate to the project directory using the terminal/command prompt.**
 3. **Run the following command to get the required dependencies:**
 
-    ```
+    ```bash
     flutter pub get
     ```
 
@@ -29,16 +31,15 @@ Before you begin, ensure you have the following installed:
 
 5. **Run the application on your device or simulator:**
 
-    ```
+    ```bash
     flutter run
     ```
 
-   <span style="color:red">You should now see the application running on your device/simulator.</span>
+    You should now see the application running on your device/simulator.
 
 ### Additional Configuration
 
 - Make sure to update the Firebase configuration in `android/app/build.gradle` and `ios/Runner/Info.plist` files with your own Firebase project details.
-- Customize the application as per your requirements by modifying the source code files.
 
 ## Usage
 
@@ -48,7 +49,7 @@ Before you begin, ensure you have the following installed:
 
 ## Support
 
-For any issues or questions regarding the application, please contact me at [himansa2226@gmail.com](himansa2226@gmail.com).
+For any issues or questions regarding the application, please contact me at [himansa2226@gmail.com](mailto:himansa2226@gmail.com).
 
 ## Contributor
 
@@ -56,5 +57,5 @@ For any issues or questions regarding the application, please contact me at [him
 
 ## Thank You
 
-Thank you for your interest in Safe Queen! This application was made possible by your support and dedication. Your contribution to enhancing women's safety and empowerment is invaluable. If you have any questions or feedback, please feel free to reach out. Your input is highly appreciated!"in this code  i want to change color of the  You should now see the application running on your device/simulator.this to red
+Thank you for your interest in Safe Queen! This application was made possible by your support and dedication. Your contribution to enhancing women's safety and empowerment is invaluable. If you have any questions or feedback, please feel free to reach out. Your input is highly appreciated!
 
