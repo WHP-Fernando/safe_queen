@@ -50,7 +50,7 @@ Before you begin, ensure you have the following installed:
 
 For any issues or questions regarding the application, please contact me at [himansa2226@gmail.com](himansa2226@gmail.com).
 
-## Contributors
+## Contributor
 
 - W.H.P.Fernando ([@WHP-Fernando](https://github.com/WHP-Fernando))
 
