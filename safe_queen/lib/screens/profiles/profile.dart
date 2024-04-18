@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:safe_queen/screens/profiles/Photovalut.dart';
+import 'package:safe_queen/screens/profiles/games_menu.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:safe_queen/services/auth.dart';
@@ -37,7 +38,7 @@ class Profile extends StatelessWidget {
           mainAxisSpacing: 20,
           children: [
             ProfileCard(
-              title: 'Edit Your Details',
+              title: 'Edit Profile',
               icon: Icons.edit,
               textColor: Colors.black,
               onPressed: () {
@@ -57,6 +58,16 @@ class Profile extends StatelessWidget {
                 );
               },
             ), 
+            ProfileCard(
+              title: 'Games',
+              icon: Icons.games,
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => GameMenu()),
+                );
+              },
+            ),
             ProfileCard(
               title: 'About Us',
               icon: Icons.info,
