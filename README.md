@@ -54,7 +54,10 @@ For any issues or questions regarding the application, please contact me at [him
 
 - W.H.P.Fernando ([@WHP-Fernando](https://github.com/WHP-Fernando))
 
-## License
+## Thank You
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+Thank you for your interest in Safe Queen! This application was made possible by your support and dedication. Your contribution to enhancing women's safety and empowerment is invaluable. If you have any questions or feedback, please feel free to reach out. Your input is highly appreciated!
+
+
+ 
 
