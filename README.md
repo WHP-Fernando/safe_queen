@@ -48,12 +48,11 @@ Before you begin, ensure you have the following installed:
 
 ## Support
 
-For any issues or questions regarding the application, please contact our support team at [support@example.com](mailto:support@example.com).
+For any issues or questions regarding the application, please contact me at [support@example.com](himansa2226@gmail.com).
 
 ## Contributors
 
-- John Doe ([@johndoe](https://github.com/johndoe))
-- Jane Smith ([@janesmith](https://github.com/janesmith))
+- W.H.P.Fernando ([@johndoe](https://github.com/johndoe))
 
 ## License
 
