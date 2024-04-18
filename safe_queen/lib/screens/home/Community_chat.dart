@@ -5,6 +5,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class CommunityChat extends StatelessWidget {
   final TextEditingController _messageController = TextEditingController();
@@ -105,10 +107,12 @@ class CommunityChat extends StatelessWidget {
                                             width: 150,
                                           )
                                         else
-                                          Text(
-                                            message['text'],
-                                            style: TextStyle(
-                                              color: Colors.black,
+                                          Linkify(
+                                            onOpen: (link) => _openLink(link),
+                                            text: message['text'],
+                                            linkStyle: TextStyle(
+                                              color: _isGoodLink(message['text']) ? Colors.green : Colors.red,
+                                              decoration: TextDecoration.underline,
                                             ),
                                           ),
                                         SizedBox(height: 4.0),
@@ -294,10 +298,18 @@ class CommunityChat extends StatelessWidget {
     );
   }
 
+  void _openLink(LinkableElement link) async {
+    if (await canLaunch(link.url)) {
+      await launch(link.url);
+    } else {
+      throw 'Could not launch ${link.url}';
+    }
+  }
+
   bool containsBadWords(String message) {
     List<String> badWords = [
-      'shit', 'fuck', 'arse', 'bullshit', 'pissed', 'lizards', 'bloody', 'bastard', 'motherfucker', 'damn', 'bugger', 'shut', 'sexy', 'sex', 'fuck you', 'go to the hell', 'go to hell', 'son of bitch', 'chick',
-      'dame', 'moll', 'doxy', 'bimbo', 'bitch', 'බැල්ලි', 'ඌ', 'මූ', 'අරූ', 'උබ', 'වරෙන්', 'පලයන්', '​තෝ'
+      'shit','slut','bitch','cunt','slag','hussy','tart','floozy','baggage', 'fuck', 'arse', 'bullshit', 'pissed', 'lizards', 'bloody', 'bastard', 'motherfucker', 'damn', 'bugger', 'shut', 'sexy', 'sex', 'fuck you', 'go to the hell', 'go to hell', 'son of bitch', 'chick','pussy','shemale','lesboan','lesbi','asshole',
+      'dame', 'moll', 'doxy', 'bimbo', 'bitch', 'බැල්ලි', 'ඌ', 'මූ', 'අරූ', 'උබ', 'වරෙන්', 'පලයන්', '​තෝ','පල','ගෑණී','උබට',
     ]; // List of bad words
     for (String word in badWords) {
       if (message.toLowerCase().contains(word)) {
@@ -306,4 +318,38 @@ class CommunityChat extends StatelessWidget {
     }
     return false;
   }
+
+ 
+bool _isGoodLink(String text) {
+  // Check if the text starts with http:// or https://
+  if (text.toLowerCase().startsWith('http://') ||
+      text.toLowerCase().startsWith('https://')) {
+    // Extract the domain from the URL
+    String domain = _extractDomain(text);
+    
+    // List of reputable domains that you recognize
+    List<String> reputableDomains = [
+       'wikipedia.org','google.com','facebook.com','twitter.com','instagram.com','youtube.com','amazon.com','microsoft.com','apple.com','cnn.com','bbc.com','nytimes.com','forbes.com','bloomberg.com','economist.com','nationalgeographic.com','reuters.com','nasa.gov','whitehouse.gov','un.org','gov.lk ','ac.lk','lk','slt.lk  ','mobitel.lk  ','sampath.lk ','commercialbank.lk  ','hnb.lk  ','peoplesbank.lk  ','cbsl.gov.lk  ','health.gov.lk  ','slbfe.lk ','education.gov.lk ','ceylonchamber.lk' ,'slida.lk ',
+        
+    ];
+    
+    // Check if the domain or its variation with "www" is in the list of reputable domains
+    if (reputableDomains.any((reputableDomain) => 
+        domain.contains(reputableDomain) || domain.contains('www.$reputableDomain'))) {
+      return true;
+    } else {
+      return false;
+    }
+  } else {
+    // Links without http:// or https:// are considered suspicious
+    return false;
+  }
+}
+
+String _extractDomain(String url) {
+  Uri uri = Uri.parse(url);
+  return uri.host;
+}
+
+
 }

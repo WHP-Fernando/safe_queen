@@ -254,11 +254,11 @@ class _HomeState extends State<Home> {
               label: 'Guardian Circle',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.chat_rounded, size: 30),
+              icon: Icon(Icons.groups_3_rounded, size: 33),
               label: 'Community Chat',
             ),
             BottomNavigationBarItem(
-              icon: Icon(Icons.person, size: 30),
+              icon: Icon(Icons.person_2_rounded, size: 30),
               label: 'Profile',
             ),
           ],
