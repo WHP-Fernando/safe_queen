@@ -1,21 +1,30 @@
 import 'dart:async';
-import 'package:flutter/material.dart'; 
+import 'package:flutter/material.dart';
 import 'package:safe_queen/screens/guardian%20circle/guardian.dart';
 import 'package:safe_queen/screens/home/Community_chat.dart';
 import 'package:safe_queen/screens/home/home.dart';
 import 'package:safe_queen/screens/profiles/Photovalut.dart';
-import 'package:safe_queen/screens/profiles/games_menu.dart';
-import 'package:safe_queen/screens/splash_screen.dart'; 
-import 'package:url_launcher/url_launcher.dart';
-import 'package:geolocator/geolocator.dart';
-import 'package:safe_queen/services/auth.dart';
 import 'package:safe_queen/screens/profiles/about_us.dart';
 import 'package:safe_queen/screens/profiles/edit_profile.dart';
- 
+import 'package:safe_queen/screens/profiles/games_menu.dart';
+import 'package:safe_queen/screens/splash_screen.dart';
+import 'package:url_launcher/url_launcher.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-class Profile extends StatelessWidget {
-  // Create object AuthService for sign out
-  final AuthServices _auth = AuthServices();
+class Profile extends StatefulWidget {
+  @override
+  _ProfileState createState() => _ProfileState();
+}
+
+class _ProfileState extends State<Profile> {
+  final FirebaseAuth _firebaseAuth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  // ignore: unused_field
+  String _password = '';
+  // ignore: unused_field
+  String _email = '';
 
   @override
   Widget build(BuildContext context) {
@@ -56,12 +65,9 @@ class Profile extends StatelessWidget {
               title: 'Photo Vault',
               icon: Icons.security,
               onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => PhotoVaultHomePage()),
-                );
+                _showPasswordPrompt(context);
               },
-            ), 
+            ),
             ProfileCard(
               title: 'Games',
               icon: Icons.games,
@@ -117,7 +123,7 @@ class Profile extends StatelessWidget {
             label: 'Profile',
           ),
         ],
-         currentIndex: 3, // Index of profile screen
+        currentIndex: 3, // Index of profile screen
         selectedItemColor: Colors.pink,
         selectedLabelStyle: TextStyle(fontSize: 12),
         unselectedLabelStyle: TextStyle(fontSize: 12),
@@ -126,20 +132,23 @@ class Profile extends StatelessWidget {
           // Handle navigation here...
           switch (index) {
             case 0:
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => Home()));
               break;
             case 1:
-               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GuardianScreen()));
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => GuardianScreen()));
               break;
             case 2:
               // Current screen, do nothing
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CommunityChat()));
+              Navigator.pushReplacement(
+                  context, MaterialPageRoute(builder: (context) => CommunityChat()));
               break;
             case 3:
-               // Current screen, do nothing
+              // Current screen, do nothing
               break;
           }
-        }
+        },
       ),
     );
   }
@@ -165,37 +174,235 @@ class Profile extends StatelessWidget {
   }
 
   // Method to show sign-out confirmation dialog
- void _showSignOutConfirmationDialog(BuildContext context) {
+  void _showSignOutConfirmationDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Sign Out"),
+          content: Text("Are you sure you want to sign out?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop(); // Close the dialog
+              },
+              child: Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                await FirebaseAuth.instance.signOut();
+                Navigator.of(context).pop(); // Close the dialog
+                // Navigate to the sign-in page after signing out
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => SplashScreen()), // Replace SignInPage with your actual sign-in page
+                );
+              },
+              child: Text("Sign Out"),
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
+ // Method to show password prompt
+void _showPasswordPrompt(BuildContext context) {
+  final user = FirebaseAuth.instance.currentUser;
+  if (user == null) {
+    // User not logged in, do nothing
+    return;
+  }
+  
+  // Retrieve the user's photo vault password independently
+  _firestore.collection('passwords').doc(user.uid).get().then((snapshot) {
+    if (snapshot.exists) {
+      final userData = snapshot.data();
+      if (userData != null && userData['photoVaultPassword'] != null) {
+        // User has set their photo vault password, proceed with verification
+        _verifyPassword(context, userData['photoVaultPassword']);
+      } else {
+        // User hasn't set their photo vault password, prompt to set it
+        _showSetPasswordPrompt(context, user.uid);
+      }
+    } else {
+      // User doesn't exist in database, prompt to set photo vault password
+      _showSetPasswordPrompt(context, user.uid);
+    }
+  }).catchError((error) {
+    // Error retrieving user data from database
+    print("Error retrieving user data: $error");
+    // Prompt to set photo vault password as fallback
+    _showSetPasswordPrompt(context, user.uid);
+  });
+}
+
+// Method to show set password prompt
+void _showSetPasswordPrompt(BuildContext context, String userId) {
   showDialog(
     context: context,
     builder: (BuildContext context) {
+      String newPassword = '';
       return AlertDialog(
-        title: Text("Sign Out"),
-        content: Text("Are you sure you want to sign out?"),
-        actions: [
-          TextButton(
-            onPressed: () {
-              Navigator.of(context).pop(); // Close the dialog
-            },
-            child: Text("Cancel"),
-          ),
-          TextButton(
-            onPressed: () async {
-              await _auth.signOut();
-              Navigator.pop(context); // Close the dialog
-               // Navigate to the sign-in page after signing out
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => SplashScreen()), // Replace SignInPage with your actual sign-in page
-              );
-            },
-            child: Text("Sign Out"),
-          ),
-        ],
+        title: Text("Set Photo Vault Password"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              obscureText: true,
+              onChanged: (value) {
+                newPassword = value;
+              },
+              decoration: InputDecoration(hintText: 'Enter new password'),
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    // Save new password to database
+                    _firestore.collection('passwords').doc(userId).set({
+                      'photoVaultPassword': newPassword,
+                    }).then((value) {
+                      Navigator.of(context).pop(); // Close the dialog
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Password set successfully.'),
+                        duration: Duration(seconds: 2),
+                      ));
+                    }).catchError((error) {
+                      print("Error setting password: $error");
+                      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                        content: Text('Failed to set password. Please try again.'),
+                        duration: Duration(seconds: 2),
+                      ));
+                    });
+                  },
+                  child: Text("Set Password"),
+                ),
+              ],
+            ),
+          ],
+        ),
       );
     },
   );
 }
+
+
+// Method to verify password
+void _verifyPassword(BuildContext context, String password) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      String enteredPassword = '';
+      return AlertDialog(
+        title: Text("Enter Photo Vault Password"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextField(
+              obscureText: true,
+              onChanged: (value) {
+                enteredPassword = value;
+              },
+              decoration: InputDecoration(hintText: 'Enter password'),
+            ),
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop(); // Close the dialog
+                  },
+                  child: Text("Cancel"),
+                ),
+                TextButton(
+                  onPressed: () {
+                    if (enteredPassword == password) {
+                      Navigator.of(context).pop(); // Close the dialog
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => PhotoVaultHomePage()),
+                      );
+                    } else {
+                      // Close the dialog first, then show reset password prompt
+                      Navigator.of(context).pop(); // Close the dialog
+                      _showForgotPasswordPrompt(context);
+                    }
+                  },
+                  child: Text("Submit"),
+                ),
+              ],
+            ),
+          ],
+        ),
+      );
+    },
+  );
+}
+ 
+  // Method to show forgot password prompt
+  void _showForgotPasswordPrompt(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        String email = '';
+        return AlertDialog(
+          title: Text("Forgot Password"),
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              TextField(
+                onChanged: (value) {
+                  email = value;
+                },
+                decoration: InputDecoration(hintText: 'Enter your email'),
+              ),
+              SizedBox(height: 10),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  TextButton(
+                    onPressed: () {
+                      Navigator.of(context).pop(); // Close the dialog
+                    },
+                    child: Text("Cancel"),
+                  ),
+                  TextButton(
+                    onPressed: () async {
+                      try {
+                        await _firebaseAuth.sendPasswordResetEmail(email: email);
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Password reset email sent. Check your inbox.'),
+                          duration: Duration(seconds: 2),
+                        ));
+                        Navigator.of(context).pop(); // Close the dialog
+                      } catch (error) {
+                        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                          content: Text('Failed to send password reset email. Please try again.'),
+                          duration: Duration(seconds: 2),
+                        ));
+                      }
+                    },
+                    child: Text("Reset Password"),
+                  ),
+                ],
+              ),
+            ],
+          ),
+        );
+      },
+    );
+  }
 }
 
 class ProfileCard extends StatelessWidget {
