@@ -6,6 +6,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter_linkify/flutter_linkify.dart';
+import 'package:safe_queen/screens/guardian%20circle/guardian.dart';
+import 'package:safe_queen/screens/home/home.dart';
+import 'package:safe_queen/screens/profiles/profile.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CommunityChat extends StatelessWidget {
@@ -200,6 +203,50 @@ class CommunityChat extends StatelessWidget {
             ),
           ),
         ],
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home, size: 30),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.circle_outlined, size: 30),
+            label: 'Guardian Circle',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.groups_3_rounded, size: 33),
+            label: 'Community Chat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_2_rounded, size: 30),
+            label: 'Profile',
+          ),
+        ],
+         currentIndex: 2, // Index of community Chat screen
+        selectedItemColor: Colors.pink,
+        selectedLabelStyle: TextStyle(fontSize: 12),
+        unselectedLabelStyle: TextStyle(fontSize: 12),
+        backgroundColor: Color.fromARGB(255, 253, 243, 252),
+        onTap: (int index) {
+          // Handle navigation here...
+          switch (index) {
+            case 0:
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+              break;
+            case 1:
+               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GuardianScreen()));
+              break;
+            case 2:
+              // Current screen, do nothing
+              break;
+            case 3:
+              // Navigate to Profile screen
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Profile()));
+              break;
+          }
+        }
       ),
     );
   }

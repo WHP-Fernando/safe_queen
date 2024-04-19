@@ -1,7 +1,11 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
+import 'package:flutter/material.dart'; 
+import 'package:safe_queen/screens/guardian%20circle/guardian.dart';
+import 'package:safe_queen/screens/home/Community_chat.dart';
+import 'package:safe_queen/screens/home/home.dart';
 import 'package:safe_queen/screens/profiles/Photovalut.dart';
 import 'package:safe_queen/screens/profiles/games_menu.dart';
+import 'package:safe_queen/screens/splash_screen.dart'; 
 import 'package:url_launcher/url_launcher.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:safe_queen/services/auth.dart';
@@ -93,6 +97,50 @@ class Profile extends StatelessWidget {
           ],
         ),
       ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home, size: 30),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.circle_outlined, size: 30),
+            label: 'Guardian Circle',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.groups_3_rounded, size: 33),
+            label: 'Community Chat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_2_rounded, size: 30),
+            label: 'Profile',
+          ),
+        ],
+         currentIndex: 3, // Index of profile screen
+        selectedItemColor: Colors.pink,
+        selectedLabelStyle: TextStyle(fontSize: 12),
+        unselectedLabelStyle: TextStyle(fontSize: 12),
+        backgroundColor: Color.fromARGB(255, 253, 243, 252),
+        onTap: (int index) {
+          // Handle navigation here...
+          switch (index) {
+            case 0:
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+              break;
+            case 1:
+               Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => GuardianScreen()));
+              break;
+            case 2:
+              // Current screen, do nothing
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CommunityChat()));
+              break;
+            case 3:
+               // Current screen, do nothing
+              break;
+          }
+        }
+      ),
     );
   }
 
@@ -117,33 +165,37 @@ class Profile extends StatelessWidget {
   }
 
   // Method to show sign-out confirmation dialog
-  void _showSignOutConfirmationDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: Text("Sign Out"),
-          content: Text("Are you sure you want to sign out?"),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(); // Close the dialog
-              },
-              child: Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () async {
-                await _auth.signOut();
-                Navigator.pop(context); // Close the profile screen
-                Navigator.pop(context); // Close the dialog
-              },
-              child: Text("Sign Out"),
-            ),
-          ],
-        );
-      },
-    );
-  }
+ void _showSignOutConfirmationDialog(BuildContext context) {
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      return AlertDialog(
+        title: Text("Sign Out"),
+        content: Text("Are you sure you want to sign out?"),
+        actions: [
+          TextButton(
+            onPressed: () {
+              Navigator.of(context).pop(); // Close the dialog
+            },
+            child: Text("Cancel"),
+          ),
+          TextButton(
+            onPressed: () async {
+              await _auth.signOut();
+              Navigator.pop(context); // Close the dialog
+               // Navigate to the sign-in page after signing out
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => SplashScreen()), // Replace SignInPage with your actual sign-in page
+              );
+            },
+            child: Text("Sign Out"),
+          ),
+        ],
+      );
+    },
+  );
+}
 }
 
 class ProfileCard extends StatelessWidget {

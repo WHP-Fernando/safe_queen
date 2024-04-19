@@ -6,6 +6,9 @@ import 'package:flutter_phone_direct_caller/flutter_phone_direct_caller.dart';
 import 'package:permission_handler/permission_handler.dart';  
 import 'package:geolocator/geolocator.dart';  
 import 'package:safe_queen/screens/guardian%20circle/contact_model.dart';
+import 'package:safe_queen/screens/home/Community_chat.dart';
+import 'package:safe_queen/screens/home/home.dart';
+import 'package:safe_queen/screens/profiles/profile.dart';
 
 class GuardianScreen extends StatefulWidget {
   @override
@@ -245,6 +248,51 @@ class _GuardianScreenState extends State<GuardianScreen> {
             await addContact(newContact);
           }
         },
+      ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        items: const <BottomNavigationBarItem>[
+          BottomNavigationBarItem(
+            icon: Icon(Icons.home, size: 30),
+            label: 'Home',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.circle_outlined, size: 30),
+            label: 'Guardian Circle',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.groups_3_rounded, size: 33),
+            label: 'Community Chat',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.person_2_rounded, size: 30),
+            label: 'Profile',
+          ),
+        ],
+         currentIndex: 1, // Index of Guardian Circle screen
+        selectedItemColor: Colors.pink,
+        selectedLabelStyle: TextStyle(fontSize: 12),
+        unselectedLabelStyle: TextStyle(fontSize: 12),
+        backgroundColor: Color.fromARGB(255, 253, 243, 252),
+        onTap: (int index) {
+          // Handle navigation here...
+          switch (index) {
+            case 0:
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Home()));
+              break;
+            case 1:
+              // Current screen, do nothing
+              break;
+            case 2:
+              // Navigate to Community Chat screen
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CommunityChat()));
+              break;
+            case 3:
+              // Navigate to Profile screen
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => Profile()));
+              break;
+          }
+        }
       ),
     );
   }

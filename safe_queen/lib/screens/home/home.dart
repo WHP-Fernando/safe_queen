@@ -94,8 +94,13 @@ class _HomeState extends State<Home> {
 
   int _selectedIndex = 0;
 
-  void _onItemTapped(int index) {
+ void _onItemTapped(int index) {
+  setState(() {
+    _selectedIndex = index;
     switch (index) {
+      case 0:
+        // Navigate to Home
+        break;
       case 1:
         Navigator.push(context, MaterialPageRoute(builder: (context) => GuardianScreen()));
         break;
@@ -105,12 +110,9 @@ class _HomeState extends State<Home> {
       case 3:
         Navigator.push(context, MaterialPageRoute(builder: (context) => Profile()));
         break;
-      default:
-        setState(() {
-          _selectedIndex = index;
-        });
     }
-  }
+  });
+}
 
   @override
   Widget build(BuildContext context) {

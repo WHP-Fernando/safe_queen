@@ -19,11 +19,11 @@ class _RegisterState extends State<Register> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.white,
+       backgroundColor: Color.fromARGB(255, 253, 238, 252), 
       appBar: AppBar(
         title: const Text(""),
         elevation: 0,
-        backgroundColor: Colors.white,
+        backgroundColor: Color.fromARGB(255, 253, 238, 252), 
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -64,7 +64,8 @@ class _RegisterState extends State<Register> {
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey[200],
+                          color: Colors.white,
+                          border: Border.all(width: 1, color: Colors.black26),
                         ),
                         child: TextFormField(
                           style: TextStyle(color: Colors.black),
@@ -92,7 +93,8 @@ class _RegisterState extends State<Register> {
                       Container(
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(10),
-                          color: Colors.grey[200],
+                          color: Colors.white,
+                          border: Border.all(width: 1, color: Colors.black26),
                         ),
                         child: TextFormField(
                           obscureText: true,
