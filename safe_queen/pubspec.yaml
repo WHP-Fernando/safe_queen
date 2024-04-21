@@ -98,7 +98,7 @@ dev_dependencies:
 flutter_launcher_icons:
   android: "launcher_icon"
   ios: true
-  image_path: "assets/images/img_rectangle_25-transformed.png"
+  image_path: "assets/images/img_rectangle 3.png"
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec
@@ -164,6 +164,7 @@ flutter:
     - assets/images/Screenshot 2024-04-13 at 15.30.12.png
     - assets/images/images copy.jpeg
     - assets/images/img_rectangle_25-transformed.png
+    - assets/images/img_rectangle 3.png
     
 
 
