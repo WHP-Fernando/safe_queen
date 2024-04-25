@@ -1,5 +1,5 @@
 # Safe Queen Application
-Welcome to Safe Queen, an application designed to enhance women's safety and empowerment in Sri Lanka through various features including guardian circle, community chat, AI chatbot, photo vault, mini-games, resources, documents, web extraction details, and more.
+Welcome to Safe Queen App, This is an application designed to enhance women's safety and empowerment in Sri Lanka through various features including guardian circle, community chat, AI chatbot, photo vault, mini-games, resources, documents, web extraction details, and more.
 
 
 ## Installation Instructions
