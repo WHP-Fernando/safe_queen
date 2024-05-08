@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -355,7 +356,7 @@ class CommunityChat extends StatelessWidget {
 
   bool containsBadWords(String message) {
     List<String> badWords = [
-      'shit','slut','bitch','cunt','slag','hussy','tart','floozy','baggage', 'fuck', 'arse', 'bullshit', 'pissed', 'lizards', 'bloody', 'bastard', 'motherfucker', 'damn', 'bugger', 'shut', 'sexy', 'sex', 'fuck you', 'go to the hell', 'go to hell', 'son of bitch', 'chick','pussy','shemale','lesboan','lesbi','asshole',
+      'shit','slut','bitch','cunt','slag','hussy','tart','floozy','baggage', 'fuck', 'arse', 'bullshit', 'pissed', 'lizards', 'bloody', 'bastard', 'motherfucker', 'damn', 'bugger', 'shut', 'sexy', 'sex', 'fuck you', 'go to the hell', 'go to hell', 'son of bitch', 'chick','pussy','shemale','lesbian','lesbi','asshole',
       'dame', 'moll', 'doxy', 'bimbo', 'bitch', 'බැල්ලි', 'ඌ', 'මූ', 'අරූ', 'උබ', 'වරෙන්', 'පලයන්', '​තෝ','පල','ගෑණී','උබට',
     ]; // List of bad words
     for (String word in badWords) {
@@ -373,6 +374,7 @@ bool _isGoodLink(String text) {
       text.toLowerCase().startsWith('https://')) {
     // Extract the domain from the URL
     String domain = _extractDomain(text);
+    print('Extracted Domain: $domain');
     
     // List of reputable domains that you recognize
     List<String> reputableDomains = [
@@ -382,7 +384,7 @@ bool _isGoodLink(String text) {
     
     // Check if the domain or its variation with "www" is in the list of reputable domains
     if (reputableDomains.any((reputableDomain) => 
-        domain.contains(reputableDomain) || domain.contains('www.$reputableDomain'))) {
+        domain.contains(reputableDomain))) {
       return true;
     } else {
       return false;
@@ -397,6 +399,60 @@ String _extractDomain(String url) {
   Uri uri = Uri.parse(url);
   return uri.host;
 }
+
+
+Future<bool> _checkUrlSafety(String url) async {
+    // Construct the API request URL
+    final apiUrl = Uri.parse('https://safebrowsing.googleapis.com/v4/threatMatches:find?key=AIzaSyBVmeRIh2YiZiP5zzADr-XjHdqRwnKRx_s');
+    
+    // Construct the request body
+    final requestBody = jsonEncode({
+      'client': {
+        'clientId': 'flutter-app',
+        'clientVersion': '1.0.0',
+      },
+      'threatInfo': {
+        'threatTypes': ['MALWARE', 'SOCIAL_ENGINEERING', 'UNWANTED_SOFTWARE'],
+        'platformTypes': ['ANY_PLATFORM'],
+        'threatEntryTypes': ['URL'],
+        'threatEntries': [
+          {'url': url},
+        ],
+      },
+    });
+
+    // Make the HTTP POST request
+    var http;
+    final response = await http.post(
+      apiUrl,
+      headers: {
+        HttpHeaders.contentTypeHeader: 'application/json',
+      },
+      body: requestBody,
+    );
+
+    // Parse the response
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      if (data['matches'] != null && data['matches'].isNotEmpty) {
+        return false; // URL is unsafe
+      } else {
+        return true; // URL is safe
+      }
+    } else {
+      throw Exception('Failed to check URL safety: ${response.reasonPhrase}');
+    }
+  }
+
+  List _extractUrls(String text) {
+    RegExp regExp = RegExp(
+      r'(https?://[^\s]+)',
+      caseSensitive: false,
+      multiLine: true,
+    );
+    Iterable matches = regExp.allMatches(text).map((match) => match.group(0)!);
+    return matches.toList();
+  }
 
 
 }

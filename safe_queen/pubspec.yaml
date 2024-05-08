@@ -65,6 +65,7 @@ dependencies:
   camera: ^0.10.5+9
   sudoku_dart: ^1.1.0
   flutter_linkify: ^6.0.0
+ 
   
  
  

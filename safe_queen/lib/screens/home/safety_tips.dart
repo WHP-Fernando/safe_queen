@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:safe_queen/screens/home/Safety%20Tips/Web_tricks.dart';
 import 'package:safe_queen/screens/home/Safety%20Tips/self_defence.dart';
 import 'package:safe_queen/screens/home/Safety%20Tips/workplace_guide.dart';
 
@@ -63,21 +62,7 @@ class SafetyTips extends StatelessWidget {
                 },
               ),
             ),
-             Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
-              child: SafetyTechniqueButton(
-                buttonText: 'Web Extract Tips',
-                image: 'assets/images/images copy.jpeg',
-                onPressed: () {
-                  Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => webextracttips(),
-                  ),
-                  );
-                },
-              ),
-            ),
+             
           ],
         ),
       ),
